@@ -5,7 +5,7 @@ import express, { Express, Request, Response, Router } from "express";
 // import router from "./Routes/Routes"
 const app: Express = express();
 
-// ehlo
+
 import dotenv from "dotenv";
 import router from "./Routes/Routes";
 dotenv.config();

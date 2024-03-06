@@ -8,7 +8,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 // import router from "./Routes/Routes"
 const app = (0, express_1.default)();
-// ehlo
 const dotenv_1 = __importDefault(require("dotenv"));
 const Routes_1 = __importDefault(require("./Routes/Routes"));
 dotenv_1.default.config();
