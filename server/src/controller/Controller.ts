@@ -3,7 +3,9 @@
 import express, { Response, Express, Request, response } from "express";
 import User from "../model/userSchema";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+ 
+
 
 const getRegister = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -27,9 +29,13 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
           passwd: hashedPasswd,
           cPasswd: hashedPasswd,
         });
+        console.log("register successful");
         res
           .status(200)
-          .json({ message: `successful, User ${user.email} created ` });
+          .json({ 
+            message: `successful, User created `,
+            user: user, 
+          });
       }
     }
   } catch (error) {
@@ -41,29 +47,50 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
 const getLogin = async (req: Request, res: Response): Promise<void> => {
   try {
     interface IUser {
-      email:string;
-      passwd:string;
+      email: string;
+      passwd: string;
+      name: string;
+      _id: string;
     }
 
-    const {email, passwd} = await req.body;
+    const { email, passwd } = await req.body;
 
-    if (!email||!passwd) {
+    if (!email || !passwd) {
       res.status(422).json({ error: "pls fill the Login" });
     } else {
-      const user:IUser|null =await User.findOne({email});
-      if(user && (await bcrypt.compare(passwd, user.passwd ))){
+      const user: IUser | null = await User.findOne({ email });
+      console.log(user?._id)
+      if (user && (await bcrypt.compare(passwd, user.passwd))) {
 
+        // token
+         const accessToken = jwt.sign(
+          {
+            user: {
+              name: user.name,
+              email: user.email,
+              userId: user._id.toString(),
+            },
+          },
+          process.env.ACCESS_TOKEN_SECRET !,
+          { expiresIn: "20d" }
+        );
 
+        // cookie
+        res.cookie("jwtTokenBablu", accessToken, {
+          expires: new Date(Date.now() + 2589000000),
+          httpOnly: true,
+        });
 
-      }else {
-        res.status(401).json({message:" invalid credentials "})
+        console.log("login successfull");
+        res.status(200).json({
+          msg: user,
+          token: accessToken,
+          userId: user._id.toString(),
+        });
+      } else {
+        res.status(401).json({ message: " invalid credentials " });
       }
     }
-
-
-
-
-
   } catch (error) {
     console.log("error in /login");
     console.error(error);
@@ -85,6 +112,7 @@ const registeruser = async (req: Request, res: Response): Promise<void> => {
     console.error(error);
   }
 };
+
 
 module.exports = {
   getRegister,

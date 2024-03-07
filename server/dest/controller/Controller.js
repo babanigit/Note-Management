@@ -15,6 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const userSchema_1 = __importDefault(require("../model/userSchema"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, email, phone, passwd, cPasswd } = yield req.body;
@@ -37,9 +38,13 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                     passwd: hashedPasswd,
                     cPasswd: hashedPasswd,
                 });
+                console.log("register successful");
                 res
                     .status(200)
-                    .json({ message: `successful, User ${user.email} created ` });
+                    .json({
+                    message: `successful, User created `,
+                    user: user,
+                });
             }
         }
     }
@@ -56,7 +61,27 @@ const getLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         else {
             const user = yield userSchema_1.default.findOne({ email });
+            console.log(user === null || user === void 0 ? void 0 : user._id);
             if (user && (yield bcrypt_1.default.compare(passwd, user.passwd))) {
+                // token
+                const accessToken = jsonwebtoken_1.default.sign({
+                    user: {
+                        name: user.name,
+                        email: user.email,
+                        userId: user._id.toString(),
+                    },
+                }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "20d" });
+                // cookie
+                res.cookie("jwtTokenBablu", accessToken, {
+                    expires: new Date(Date.now() + 2589000000),
+                    httpOnly: true,
+                });
+                console.log("login successfull");
+                res.status(200).json({
+                    msg: user,
+                    token: accessToken,
+                    userId: user._id.toString(),
+                });
             }
             else {
                 res.status(401).json({ message: " invalid credentials " });
