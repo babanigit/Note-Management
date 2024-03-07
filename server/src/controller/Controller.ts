@@ -4,11 +4,25 @@ import express, { Response, Express, Request, response } from "express";
 import User from "../model/userSchema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
- 
-
 
 const getRegister = async (req: Request, res: Response): Promise<void> => {
   try {
+    
+    // interface IUser {
+    //   name: string;
+    //   email: string;
+    //   phone: Number;
+    //   passwd: string;
+    //   cPasswd: string;
+    //   _id: string;
+    //   createdAt: {
+    //     $date: string
+    //   },
+    //   updatedAt: {
+    //     $date:string;
+    //   },
+    // }
+
     const { name, email, phone, passwd, cPasswd } = await req.body;
     if (!name || !email || !phone || !passwd || !cPasswd) {
       res.status(422).json({ error: "pls fill the registeration form" });
@@ -30,14 +44,23 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
           cPasswd: hashedPasswd,
         });
 
-        
+        const accessToken = jwt.sign(
+          {
+            user: {
+              name: user.name,
+              email: user.email,
+              userId: user._id.toString(),
+            },
+          },
+          process.env.ACCESS_TOKEN_SECRET!,
+          { expiresIn: "20d" }
+        );
+
         console.log("register successful");
-        res
-          .status(200)
-          .json({ 
-            message: `successful, User created `,
-            user: user, 
-          });
+        res.status(200).json({
+          message: `successful, User created `,
+          user: user,
+        });
       }
     }
   } catch (error) {
@@ -61,11 +84,10 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
       res.status(422).json({ error: "pls fill the Login" });
     } else {
       const user: IUser | null = await User.findOne({ email });
-      console.log(user?._id)
+      console.log(user?._id);
       if (user && (await bcrypt.compare(passwd, user.passwd))) {
-
         // token
-         const accessToken = jwt.sign(
+        const accessToken = jwt.sign(
           {
             user: {
               name: user.name,
@@ -73,7 +95,7 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
               userId: user._id.toString(),
             },
           },
-          process.env.ACCESS_TOKEN_SECRET !,
+          process.env.ACCESS_TOKEN_SECRET!,
           { expiresIn: "20d" }
         );
 
@@ -107,14 +129,6 @@ const getData2 = (req: Request, res: Response) => {
   const { name, phone } = req.body;
   res.status(200).json({ message: `get all contacts ${name} and ${phone} ` });
 };
-
-const registeruser = async (req: Request, res: Response): Promise<void> => {
-  try {
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 
 module.exports = {
   getRegister,

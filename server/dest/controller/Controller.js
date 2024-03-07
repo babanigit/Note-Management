@@ -18,6 +18,20 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // interface IUser {
+        //   name: string;
+        //   email: string;
+        //   phone: Number;
+        //   passwd: string;
+        //   cPasswd: string;
+        //   _id: string;
+        //   createdAt: {
+        //     $date: string
+        //   },
+        //   updatedAt: {
+        //     $date:string;
+        //   },
+        // }
         const { name, email, phone, passwd, cPasswd } = yield req.body;
         if (!name || !email || !phone || !passwd || !cPasswd) {
             res.status(422).json({ error: "pls fill the registeration form" });
@@ -38,10 +52,15 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                     passwd: hashedPasswd,
                     cPasswd: hashedPasswd,
                 });
+                const accessToken = jsonwebtoken_1.default.sign({
+                    user: {
+                        name: user.name,
+                        email: user.email,
+                        userId: user._id.toString(),
+                    },
+                }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "20d" });
                 console.log("register successful");
-                res
-                    .status(200)
-                    .json({
+                res.status(200).json({
                     message: `successful, User created `,
                     user: user,
                 });
@@ -100,13 +119,6 @@ const getData2 = (req, res) => {
     const { name, phone } = req.body;
     res.status(200).json({ message: `get all contacts ${name} and ${phone} ` });
 };
-const registeruser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-    }
-    catch (error) {
-        console.error(error);
-    }
-});
 module.exports = {
     getRegister,
     getLogin,
