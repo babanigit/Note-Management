@@ -27,6 +27,6 @@ app.get("/hi", (req: Request, res: Response) => {
 
 app.listen(port, () => {
   console.log(
-    `[server]: hell my Server is running at http://localhost:${port}`
+    `[server]: hello, my Server is running at http://localhost:${port}`
   );
 });
