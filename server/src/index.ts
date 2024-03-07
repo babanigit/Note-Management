@@ -9,8 +9,11 @@ const app: Express = express();
 app.use(express.json());
 dotenv.config({path:"./.env"});
 const port = process.env.PORT || 2000; //5002
-app.use(router);  
+
 connectDb();
+
+app.use(router);  
+
 
 
 // demo

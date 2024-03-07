@@ -14,11 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
-const { getData, getData2 } = require("../controller/Controller");
+const { getData, getData2, getRegister, getLogin } = require("../controller/Controller");
+router.route("/register").post(getRegister);
+router.route("/login").post(getLogin);
 router.route("/trail").get(getData);
 router.route("/getdata").post(getData2);
-router.route("/demo").post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-}));
+router.route("/demo").post((req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
 //   module.exports ={
 //     router
 //   }

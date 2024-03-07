@@ -11,8 +11,8 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 dotenv_1.default.config({ path: "./.env" });
 const port = process.env.PORT || 2000; //5002
-app.use(Routes_1.default);
 (0, connection_1.default)();
+app.use(Routes_1.default);
 // demo
 app.get("/", (req, res) => {
     res.send("Express + TypeScript Server");
