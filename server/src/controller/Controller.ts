@@ -29,6 +29,8 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
           passwd: hashedPasswd,
           cPasswd: hashedPasswd,
         });
+
+        
         console.log("register successful");
         res
           .status(200)
