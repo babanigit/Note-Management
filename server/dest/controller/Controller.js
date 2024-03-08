@@ -25,16 +25,13 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         //   passwd: string;
         //   cPasswd: string;
         //   _id: string;
-        //   createdAt: {
-        //     $date: string
-        //   },
-        //   updatedAt: {
-        //     $date:string;
-        //   },
+        //   createdAt: string;
+        //   updatedAt: string;
+        //   __v:number;
         // }
         const { name, email, phone, passwd, cPasswd } = yield req.body;
         if (!name || !email || !phone || !passwd || !cPasswd) {
-            res.status(422).json({ error: "pls fill the registeration form" });
+            res.status(422).json({ error: "pls fill the registration form" });
         }
         else {
             // const userExist= await User.findOne({email:email});
@@ -52,6 +49,7 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                     passwd: hashedPasswd,
                     cPasswd: hashedPasswd,
                 });
+                // const accessToken = await getRegister.generateToken() ;
                 const accessToken = jsonwebtoken_1.default.sign({
                     user: {
                         name: user.name,
@@ -60,9 +58,11 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                     },
                 }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "20d" });
                 console.log("register successful");
+                // response that will go to frontend....
                 res.status(200).json({
-                    message: `successful, User created `,
+                    message: `registration successful from server `,
                     user: user,
+                    token: accessToken,
                 });
             }
         }
@@ -90,14 +90,15 @@ const getLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                         userId: user._id.toString(),
                     },
                 }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "20d" });
-                // cookie
-                res.cookie("jwtTokenBablu", accessToken, {
-                    expires: new Date(Date.now() + 2589000000),
-                    httpOnly: true,
-                });
-                console.log("login successfull");
+                // // cookie
+                // res.cookie("jwtTokenBablu", accessToken, {
+                //   expires: new Date(Date.now() + 2589000000),
+                //   httpOnly: true,
+                // });
+                console.log("login successful");
                 res.status(200).json({
-                    msg: user,
+                    msg: " Login successful from server",
+                    user: user,
                     token: accessToken,
                     userId: user._id.toString(),
                 });

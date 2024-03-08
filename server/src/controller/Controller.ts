@@ -7,7 +7,6 @@ import jwt from "jsonwebtoken";
 
 const getRegister = async (req: Request, res: Response): Promise<void> => {
   try {
-    
     // interface IUser {
     //   name: string;
     //   email: string;
@@ -15,17 +14,14 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
     //   passwd: string;
     //   cPasswd: string;
     //   _id: string;
-    //   createdAt: {
-    //     $date: string
-    //   },
-    //   updatedAt: {
-    //     $date:string;
-    //   },
+    //   createdAt: string;
+    //   updatedAt: string;
+    //   __v:number;
     // }
 
     const { name, email, phone, passwd, cPasswd } = await req.body;
     if (!name || !email || !phone || !passwd || !cPasswd) {
-      res.status(422).json({ error: "pls fill the registeration form" });
+      res.status(422).json({ error: "pls fill the registration form" });
     } else {
       // const userExist= await User.findOne({email:email});
 
@@ -44,6 +40,8 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
           cPasswd: hashedPasswd,
         });
 
+        // const accessToken = await getRegister.generateToken() ;
+
         const accessToken = jwt.sign(
           {
             user: {
@@ -57,9 +55,12 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
         );
 
         console.log("register successful");
+
+        // response that will go to frontend....
         res.status(200).json({
-          message: `successful, User created `,
+          message: `registration successful from server `,
           user: user,
+          token: accessToken,
         });
       }
     }
@@ -99,15 +100,16 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
           { expiresIn: "20d" }
         );
 
-        // cookie
-        res.cookie("jwtTokenBablu", accessToken, {
-          expires: new Date(Date.now() + 2589000000),
-          httpOnly: true,
-        });
+        // // cookie
+        // res.cookie("jwtTokenBablu", accessToken, {
+        //   expires: new Date(Date.now() + 2589000000),
+        //   httpOnly: true,
+        // });
 
-        console.log("login successfull");
+        console.log("login successful");
         res.status(200).json({
-          msg: user,
+          msg: " Login successful from server",
+          user: user,
           token: accessToken,
           userId: user._id.toString(),
         });

@@ -1,6 +1,7 @@
 
 
 import mongoose from "mongoose";
+const jwt =require("jsonwebtoken");
 
 
 
@@ -31,6 +32,25 @@ const userSchema= new mongoose.Schema({
 },{
     timestamps:true,
 })
+
+// // generate token   '
+// userSchema.methods.generateToken=async function () {
+
+//     const accessToken = jwt.sign(
+//           {
+//             user: {
+//               name: user.name,
+//               email: user.email,
+//               userId: user._id.toString(),
+//             },
+//           },
+//           process.env.ACCESS_TOKEN_SECRET!,
+//           { expiresIn: "20d" }
+//         );
+    
+
+//     return
+// }
 
 
 
