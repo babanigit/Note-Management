@@ -1,13 +1,13 @@
 
 
 import React from 'react'
+import Main from './conteners/Main'
 
 const App = () => {
   return (
     <>
-    <div className=' bg-red-50 h-screen place-items-center grid' >
-
-      <div>hello</div>
+    <div className='' >
+      <Main/>
     </div>
     </>
   )

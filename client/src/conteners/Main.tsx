@@ -15,18 +15,15 @@ const Main = ():ReactElement => {
     <>
      <BrowserRouter basename="/">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Splash />} />
           <Route path="/splash" element={<Splash />} />
 
-          <Route path="/home" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login/>} />
-          <Route path="/about" element={<About/>} />
-
-          {/* <Route path="/aboutUs" element={<AboutUs/>}/> */}
-
-          <Route path="/aboutUs" element={<Protection />}>
-            <Route path="/aboutUs" element={<About/>} />
+         
+          <Route path="/home" element={<Home />} />
+          <Route path="/about" element={<Protection />}>
+            <Route path="/about" element={<About/>} />
           </Route>
         </Routes>
       </BrowserRouter>
