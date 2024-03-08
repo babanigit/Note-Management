@@ -17,6 +17,50 @@ const router = express_1.default.Router();
 const { getData, getData2, getRegister, getLogin } = require("../controller/Controller");
 router.route("/register").post(getRegister);
 router.route("/login").post(getLogin);
+// for login2
+const userSchema_1 = __importDefault(require("../model/userSchema"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+router.post("/login2", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, passwd } = yield req.body;
+        if (!email || !passwd) {
+            res.status(422).json({ error: "pls fill the Login" });
+        }
+        else {
+            const user = yield userSchema_1.default.findOne({ email });
+            console.log(user === null || user === void 0 ? void 0 : user._id);
+            if (user && (yield bcrypt_1.default.compare(passwd, user.passwd))) {
+                // token
+                const accessToken = jsonwebtoken_1.default.sign({
+                    user: {
+                        name: user.name,
+                        email: user.email,
+                        userId: user._id.toString(),
+                    },
+                }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "20d" });
+                // // cookie
+                // res.cookie("jwtTokenBablu", accessToken, {
+                //   expires: new Date(Date.now() + 2589000000),
+                //   httpOnly: true,
+                // });
+                console.log("login successful");
+                res.json({
+                    message: "Login successful from server",
+                    user: user,
+                    token: accessToken,
+                });
+            }
+            else {
+                res.json({ message: " invalid credentials " });
+            }
+        }
+    }
+    catch (error) {
+        console.log("error in /login2");
+        console.error(error);
+    }
+}));
 router.route("/trail").get(getData);
 router.route("/getdata").post(getData2);
 router.route("/demo").post((req, res) => __awaiter(void 0, void 0, void 0, function* () { }));

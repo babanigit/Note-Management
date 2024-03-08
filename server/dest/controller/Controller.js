@@ -18,17 +18,6 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // interface IUser {
-        //   name: string;
-        //   email: string;
-        //   phone: Number;
-        //   passwd: string;
-        //   cPasswd: string;
-        //   _id: string;
-        //   createdAt: string;
-        //   updatedAt: string;
-        //   __v:number;
-        // }
         const { name, email, phone, passwd, cPasswd } = yield req.body;
         if (!name || !email || !phone || !passwd || !cPasswd) {
             res.status(422).json({ error: "pls fill the registration form" });
@@ -97,14 +86,13 @@ const getLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 // });
                 console.log("login successful");
                 res.status(200).json({
-                    msg: " Login successful from server",
+                    message: "Login successful from server",
                     user: user,
                     token: accessToken,
-                    userId: user._id.toString(),
                 });
             }
             else {
-                res.status(401).json({ message: " invalid credentials " });
+                res.status(404).json({ message: " invalid credentials " });
             }
         }
     }

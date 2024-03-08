@@ -14,7 +14,6 @@ connectDb();
 
 app.use(router);  
 
-
 // demo
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");

@@ -7,17 +7,6 @@ import jwt from "jsonwebtoken";
 
 const getRegister = async (req: Request, res: Response): Promise<void> => {
   try {
-    // interface IUser {
-    //   name: string;
-    //   email: string;
-    //   phone: Number;
-    //   passwd: string;
-    //   cPasswd: string;
-    //   _id: string;
-    //   createdAt: string;
-    //   updatedAt: string;
-    //   __v:number;
-    // }
 
     const { name, email, phone, passwd, cPasswd } = await req.body;
     if (!name || !email || !phone || !passwd || !cPasswd) {
@@ -100,6 +89,7 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
           { expiresIn: "20d" }
         );
 
+
         // // cookie
         // res.cookie("jwtTokenBablu", accessToken, {
         //   expires: new Date(Date.now() + 2589000000),
@@ -108,13 +98,12 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
 
         console.log("login successful");
         res.status(200).json({
-          msg: " Login successful from server",
+          message: "Login successful from server",
           user: user,
           token: accessToken,
-          userId: user._id.toString(),
         });
       } else {
-        res.status(401).json({ message: " invalid credentials " });
+        res.status(404).json({ message: " invalid credentials " });
       }
     }
   } catch (error) {
