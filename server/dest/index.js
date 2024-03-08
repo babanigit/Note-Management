@@ -10,7 +10,7 @@ const connection_1 = __importDefault(require("./db/connection"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 dotenv_1.default.config({ path: "./.env" });
-const port = process.env.PORT || 2000; //5002
+const port = process.env.PORT; //5002
 (0, connection_1.default)();
 app.use(Routes_1.default);
 // demo

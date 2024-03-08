@@ -8,7 +8,7 @@ import connectDb from "./db/connection";
 const app: Express = express();
 app.use(express.json());
 dotenv.config({path:"./.env"});
-const port = process.env.PORT || 2000; //5002
+const port = process.env.PORT //5002
 
 connectDb();
 
