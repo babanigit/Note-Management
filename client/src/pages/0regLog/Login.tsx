@@ -11,7 +11,7 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch('/login', {
+      const res = await fetch('https://ts-nodejs-server.vercel.app/login', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
