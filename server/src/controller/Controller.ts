@@ -105,9 +105,9 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
         console.log("login successful");
 
         res.status(200).json({
-          "user": user
-          // message: "Login successful from server",
-        // token: accessToken,
+          "user": user,
+          message: "Login successful from server",
+        token: accessToken,
         });
 
         

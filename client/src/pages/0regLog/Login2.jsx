@@ -25,7 +25,7 @@ const SignIn = () => {
       console.log("clicked")
       e.preventDefault();
 
-      const res = await fetch('/login2', {
+      const res = await fetch('https://ts-nodejs-server.vercel.app/login2', {
         method : "POST",
         headers: {
           "Content-Type": "application/json",
