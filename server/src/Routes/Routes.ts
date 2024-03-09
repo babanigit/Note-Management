@@ -24,7 +24,7 @@ router.post("/login2", async (req: Request, res: Response): Promise<void> => {
   
       if (!email || !passwd) {
         
-        res.status(422).json({ error: "pls fill the Login" });
+        res.status(422).json({ error: "pls fill the Login from login2" });
       } else {
         const user: IUser | null = await User.findOne({ email });
         console.log(user?._id);

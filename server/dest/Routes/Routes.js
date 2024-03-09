@@ -25,7 +25,7 @@ router.post("/login2", (req, res) => __awaiter(void 0, void 0, void 0, function*
     try {
         const { email, passwd } = yield req.body;
         if (!email || !passwd) {
-            res.status(422).json({ error: "pls fill the Login" });
+            res.status(422).json({ error: "pls fill the Login from login2" });
         }
         else {
             const user = yield userSchema_1.default.findOne({ email });

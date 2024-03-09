@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const connectDb = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // const DB: string | undefined = process.env.DATABASE;
         const DB = process.env.DATABASE;
         if (!DB) {
             throw new Error("Database connection string is not provided.");

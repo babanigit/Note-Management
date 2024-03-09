@@ -1,8 +1,12 @@
 import mongoose from "mongoose";
+import utilEnv from "../util/validateEnv";
 
 const connectDb = async ():Promise<void> => {
   try {
+    // const DB: string | undefined = process.env.DATABASE;
+
     const DB: string | undefined = process.env.DATABASE;
+
 
     if (!DB) {
       throw new Error("Database connection string is not provided.");

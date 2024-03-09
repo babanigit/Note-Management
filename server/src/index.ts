@@ -4,6 +4,9 @@ import express, { Express, Request, Response, Router } from "express";
 import dotenv from "dotenv";
 import router from "./Routes/Routes";
 import connectDb from "./db/connection";
+import utilEnv from "./util/validateEnv";
+
+
 
 const app: Express = express();
 app.use(express.json());

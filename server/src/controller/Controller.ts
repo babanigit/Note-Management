@@ -71,7 +71,7 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
     const { email, passwd } = await req.body;
 
     if (!email || !passwd) {
-      res.status(422).json({ error: "pls fill the Login" });
+      res.status(400).json({ message: "all field required" });
 
 
     } else {
