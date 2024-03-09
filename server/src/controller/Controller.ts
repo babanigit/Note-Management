@@ -4,6 +4,7 @@ import express, { Response, Express, Request, response } from "express";
 import User from "../model/userSchema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { error } from "console";
 
 const getRegister = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -78,6 +79,8 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
 
     } else {
       const user: IUser | null = await User.findOne({ email });
+
+
       console.log(user?._id);
 
 
