@@ -70,6 +70,8 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
 
     const { email, passwd } = await req.body;
 
+    console.log(email,passwd)
+
     if (!email || !passwd) {
       res.status(400).json({ message: "all field required" });
 
@@ -104,10 +106,11 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
 
         res.status(200).json({
           "user": user
+          // message: "Login successful from server",
+        // token: accessToken,
         });
 
-        // message: "Login successful from server",
-        // token: accessToken,
+        
 
       } else {
         res.status(404).json({ message: " invalid credentials " });

@@ -24,6 +24,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 router.post("/login2", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, passwd } = yield req.body;
+        console.log(email, passwd);
         if (!email || !passwd) {
             res.status(422).json({ error: "pls fill the Login from login2" });
         }

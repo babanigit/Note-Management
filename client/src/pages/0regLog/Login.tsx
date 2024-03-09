@@ -4,20 +4,20 @@ import { useNavigate, Link } from "react-router-dom";
 const SignIn: React.FC = () => {
   const history = useNavigate();
   const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [passwd, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch("https://ts-nodejs-server.vercel.app/login", {
+      const res = await fetch("/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email,
-          password,
+          passwd,
         }),
       });
       const data = await res.json();
@@ -59,7 +59,7 @@ const SignIn: React.FC = () => {
               <input
                 onChange={(e) => setPassword(e.target.value)}
                 className="p-3 my-2  rounded"
-                value={password}
+                value={passwd}
                 type="password"
                 placeholder="Password"
                 autoComplete="current-password"

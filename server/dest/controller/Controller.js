@@ -64,6 +64,7 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 const getLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, passwd } = yield req.body;
+        console.log(email, passwd);
         if (!email || !passwd) {
             res.status(400).json({ message: "all field required" });
         }
@@ -87,9 +88,9 @@ const getLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 console.log("login successful");
                 res.status(200).json({
                     "user": user
+                    // message: "Login successful from server",
+                    // token: accessToken,
                 });
-                // message: "Login successful from server",
-                // token: accessToken,
             }
             else {
                 res.status(404).json({ message: " invalid credentials " });

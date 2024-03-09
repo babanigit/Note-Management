@@ -11,7 +11,7 @@ const SignIn = () => {
   const history = useNavigate();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [passwd, setPassword] = useState("");
 
   console.log(email)
 
@@ -25,14 +25,14 @@ const SignIn = () => {
       console.log("clicked")
       e.preventDefault();
 
-      const res = await fetch('https://ts-nodejs-server.vercel.app/login', {
+      const res = await fetch('/login2', {
         method : "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email,
-          password
+          passwd
         })
       });
 
@@ -96,7 +96,7 @@ const SignIn = () => {
               <input 
                 onChange={(e) => setPassword(e.target.value)}
                 className='p-3 my-2  rounded' 
-                value={password}
+                value={passwd}
                 type='password' 
                 placeholder='Password'
                 autoComplete='current-password'
