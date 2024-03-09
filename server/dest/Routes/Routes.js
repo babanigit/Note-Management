@@ -45,7 +45,7 @@ router.post("/login2", (req, res) => __awaiter(void 0, void 0, void 0, function*
                 //   httpOnly: true,
                 // });
                 console.log("login successful");
-                res.json({
+                res.status(200).json({
                     message: "Login successful from server",
                     user: user,
                     token: accessToken,

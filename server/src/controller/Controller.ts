@@ -72,9 +72,13 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
 
     if (!email || !passwd) {
       res.status(422).json({ error: "pls fill the Login" });
+
+
     } else {
       const user: IUser | null = await User.findOne({ email });
       console.log(user?._id);
+
+
       if (user && (await bcrypt.compare(passwd, user.passwd))) {
         // token
         const accessToken = jwt.sign(
@@ -97,11 +101,14 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
         // });
 
         console.log("login successful");
+
         res.status(200).json({
-          message: "Login successful from server",
-          user: user,
-          token: accessToken,
+          "user": user
         });
+
+        // message: "Login successful from server",
+        // token: accessToken,
+
       } else {
         res.status(404).json({ message: " invalid credentials " });
       }

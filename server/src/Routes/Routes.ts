@@ -23,6 +23,7 @@ router.post("/login2", async (req: Request, res: Response): Promise<void> => {
       const { email, passwd } = await req.body;
   
       if (!email || !passwd) {
+        
         res.status(422).json({ error: "pls fill the Login" });
       } else {
         const user: IUser | null = await User.findOne({ email });
@@ -49,7 +50,7 @@ router.post("/login2", async (req: Request, res: Response): Promise<void> => {
           // });
   
           console.log("login successful");
-          res.json({
+          res.status(200).json({
             message: "Login successful from server",
             user: user,
             token: accessToken,

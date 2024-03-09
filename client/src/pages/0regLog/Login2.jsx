@@ -25,7 +25,7 @@ const SignIn = () => {
       console.log("clicked")
       e.preventDefault();
 
-      const res = await fetch('/login', {
+      const res = await fetch('https://ts-nodejs-server.vercel.app/login', {
         method : "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +52,7 @@ const SignIn = () => {
       }else {
         console.log("login successful");
         alert("login successfull")
-        history("/home", { replace: true });
+        // history("/home", { replace: true });
       }
       
     } catch (error) {

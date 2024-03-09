@@ -86,10 +86,10 @@ const getLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 // });
                 console.log("login successful");
                 res.status(200).json({
-                    message: "Login successful from server",
-                    user: user,
-                    token: accessToken,
+                    "user": user
                 });
+                // message: "Login successful from server",
+                // token: accessToken,
             }
             else {
                 res.status(404).json({ message: " invalid credentials " });
