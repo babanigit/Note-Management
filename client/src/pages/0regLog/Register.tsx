@@ -48,7 +48,7 @@ const Register: React.FC = () => {
     const { name, email, phone, passwd, cPasswd } = user;
 
     const res = await fetch("https://ts-nodejs-server-2.vercel.app/register", {
-      // mode:"no-cors",
+      mode:"no-cors",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
