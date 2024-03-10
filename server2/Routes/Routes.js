@@ -7,12 +7,14 @@ const connectDb =  require("../db/connection");
 
 // require("../db/connection");
 
-connectDb();
 
 
 const User = require("../model/userSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+// connectDb();
+
 
 // router.route("/register").post(getRegister);
 // router.route("/login").post(getLogin);
