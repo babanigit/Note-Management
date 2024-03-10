@@ -48,7 +48,7 @@ const Register: React.FC = () => {
     const { name, email, phone, passwd, cPasswd } = user;
 
     const res = await fetch("/register", {
-      // mode:"no-cors",
+      mode:"no-cors",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,16 +56,26 @@ const Register: React.FC = () => {
       body: JSON.stringify({ name, email, phone, passwd, cPasswd }),
     });
 
-    const data = await res.json();
+    
+    try {
+      
+       const data = await res.json();
 
-    console.log(data)
+       console.log(data)
 
-    if (data.Status === 422 || !data) {
-      window.alert("Invalid Registration");
-    } else {
-      window.alert("Successful Registration");
-      // history("/home", { replace: true });
+       if (data.Status === 422 || !data) {
+         window.alert("Invalid Registration");
+       } else {
+         window.alert("Successful Registration");
+         // history("/home", { replace: true });
+       }
+
+    } catch (error) {
+      console.error(error)
     }
+
+
+   
   };
 
   return (
