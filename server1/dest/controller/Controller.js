@@ -87,7 +87,7 @@ const getLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 // });
                 console.log("login successful");
                 res.status(200).json({
-                    "user": user,
+                    user: user,
                     message: "Login successful from server",
                     token: accessToken,
                 });

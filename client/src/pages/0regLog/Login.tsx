@@ -10,8 +10,8 @@ const SignIn: React.FC = () => {
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch("https://ts-nodejs-server2.vercel.app/login", {
-        mode:"no-cors",
+      const res = await fetch("/login", {
+ 
         method: "POST",
         headers: {
           "Content-Type": "application/json",

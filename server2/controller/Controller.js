@@ -1,27 +1,18 @@
-// all the functionality will come here
+const express = require("express");
+const User = require("../model/userSchema");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-import express, { Response, Express, Request, response } from "express";
-import User from "../model/userSchema";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { error } from "console";
-
-const getRegister = async (req: Request, res: Response): Promise<void> => {
+const getRegister = async (req, res) => {
   try {
-
-    const { name, email, phone, passwd, cPasswd } = await req.body;
+    const { name, email, phone, passwd, cPasswd } = req.body;
     if (!name || !email || !phone || !passwd || !cPasswd) {
       res.status(422).json({ error: "pls fill the registration form" });
     } else {
-      // const userExist= await User.findOne({email:email});
-
       if (await User.findOne({ email: email })) {
-        res
-          .status(400)
-          .json({ message: `user ${email} is already registered` });
+        res.status(400).json({ message: `user ${email} is already registered` });
       } else {
         const hashedPasswd = await bcrypt.hash(passwd, 10);
-
         const user = await User.create({
           name,
           email,
@@ -29,8 +20,6 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
           passwd: hashedPasswd,
           cPasswd: hashedPasswd,
         });
-
-        // const accessToken = await getRegister.generateToken() ;
 
         const accessToken = jwt.sign(
           {
@@ -40,13 +29,11 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
               userId: user._id.toString(),
             },
           },
-          process.env.ACCESS_TOKEN_SECRET!,
+          process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: "20d" }
         );
 
         console.log("register successful");
-
-        // response that will go to frontend....
         res.status(200).json({
           message: `registration successful from server `,
           user: user,
@@ -60,33 +47,14 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const getLogin = async (req: Request, res: Response): Promise<void> => {
+const getLogin = async (req, res) => {
   try {
-    interface IUser {
-      email: string;
-      passwd: string;
-      name: string;
-      _id: string;
-    }
-
-
-    const { email, passwd } = await req.body;
-
-    console.log(email,passwd)
-
+    const { email, passwd } = req.body;
     if (!email || !passwd) {
       res.status(400).json({ message: "all field required" });
-
-
     } else {
-      const user: IUser | null = await User.findOne({ email });
-
-
-      console.log(user?._id);
-
-
+      const user = await User.findOne({ email });
       if (user && (await bcrypt.compare(passwd, user.passwd))) {
-        // token
         const accessToken = jwt.sign(
           {
             user: {
@@ -95,27 +63,15 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
               userId: user._id.toString(),
             },
           },
-          process.env.ACCESS_TOKEN_SECRET!,
+          process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: "20d" }
         );
-
-
-        // // cookie
-        // res.cookie("jwtTokenBablu", accessToken, {
-        //   expires: new Date(Date.now() + 2589000000),
-        //   httpOnly: true,
-        // });
-
         console.log("login successful");
-
         res.status(200).json({
           user: user,
           message: "Login successful from server",
           token: accessToken,
         });
-
-        
-
       } else {
         res.status(404).json({ message: " invalid credentials " });
       }
@@ -126,11 +82,11 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const getData = (req: Request, res: Response) => {
+const getData = (req, res) => {
   res.status(200).json({ message: "get all contacts " });
 };
 
-const getData2 = (req: Request, res: Response) => {
+const getData2 = (req, res) => {
   const { name, phone } = req.body;
   res.status(200).json({ message: `get all contacts ${name} and ${phone} ` });
 };
