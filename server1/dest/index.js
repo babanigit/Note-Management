@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const Routes_1 = __importDefault(require("./Routes/Routes"));
 const connection_1 = __importDefault(require("./db/connection"));
+const cors = require("cors");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 dotenv_1.default.config({ path: "./.env" });
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
 app.get("/hi", (req, res) => {
     res.send("hii expressss");
 });
+app.use(cors());
 app.listen(port, () => {
     console.log(`[server]: hello, my Server is running at http://localhost:${port}`);
 });

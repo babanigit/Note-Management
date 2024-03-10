@@ -11,6 +11,7 @@ const SignIn: React.FC = () => {
     e.preventDefault();
     try {
       const res = await fetch("https://ts-nodejs-server2.vercel.app/login", {
+        mode:"no-cors",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
