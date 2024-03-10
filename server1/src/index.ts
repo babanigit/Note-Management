@@ -5,6 +5,9 @@ import dotenv from "dotenv";
 import router from "./Routes/Routes";
 import connectDb from "./db/connection";
 import utilEnv from "./util/validateEnv";
+const cors = require("cors");
+
+
 
 
 
@@ -25,6 +28,9 @@ app.get("/", (req: Request, res: Response) => {
 app.get("/hi", (req: Request, res: Response) => {
   res.send("hii expressss");
 });
+
+app.use(cors());
+
 
 app.listen(port, () => {
   console.log(
