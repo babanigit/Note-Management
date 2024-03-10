@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const { getData, getData2, getRegister, getLogin } = require("../controller/Controller");
+
+require("../db/connection");
+
 const User = require("../model/userSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
