@@ -47,8 +47,8 @@ const Register: React.FC = () => {
     e.preventDefault();
     const { name, email, phone, passwd, cPasswd } = user;
 
-    const res = await fetch("/register", {
-      mode:"no-cors",
+    const res = await fetch("https://ts-nodejs-server-2.vercel.app/register", {
+      // mode:"no-cors",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +64,7 @@ const Register: React.FC = () => {
       window.alert("Invalid Registration");
     } else {
       window.alert("Successful Registration");
-      history("/home", { replace: true });
+      // history("/home", { replace: true });
     }
   };
 

@@ -34,7 +34,7 @@ app.use(cors());
 
 app.listen(port, () => {
   console.log(
-    "running on server 5002"
+    `server running ar ${port}`
     );
 });
 

@@ -33,7 +33,7 @@ router.post("/register", async (req, res) => {
 
   if (!name || !email || !phone || !passwd || !cPasswd) {
     // status(422)  this will give u error type
-    return res.status(422).json({ error: "pls fill the registration form" });
+    return res.status(422).json({ error: "pls fill the registration" });
   }
   else {
 
@@ -58,6 +58,7 @@ router.post("/register", async (req, res) => {
     res
       .status(201)
       .json({ message: "user registered successfully in backend" } );
+      
   }
   } catch (err) {
     console.log(err);
