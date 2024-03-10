@@ -1,8 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const { getData, getData2, getRegister, getLogin } = require("../controller/Controller");
+const connectDb =  require("../db/connection");
 
-require("../db/connection");
+
+
+// require("../db/connection");
+
+connectDb();
+
 
 const User = require("../model/userSchema");
 const bcrypt = require("bcrypt");
@@ -62,7 +68,7 @@ router.post("/login", async (req, res) => {
   // res.json({message:"awesome"});
 
   try {
-    const { email, passwd } = req.body;
+    const { email, passwd } = await req.body;
 
     if (!email || !passwd) {
       return res.status(400).json({ error: "null data, please fill the data" });
