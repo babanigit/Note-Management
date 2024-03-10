@@ -46,7 +46,7 @@ router.post("/register", async (req, res) => {
 
     res
       .status(201)
-      .json({ message: "user registered successfully in backend" });
+      .json({ message: "user registered successfully in backend" } );
   }
   } catch (err) {
     console.log(err);
