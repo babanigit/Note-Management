@@ -19,7 +19,7 @@ const jwt = require("jsonwebtoken");
 // router.route("/register").post(getRegister);
 // router.route("/login").post(getLogin);
 
-router.post("https://ts-nodejs-server2.onrender.com/register", async (req, res) => {
+router.post("/register", async (req, res) => {
 
   try {
 
