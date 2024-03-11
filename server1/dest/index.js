@@ -12,6 +12,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 dotenv_1.default.config({ path: "./.env" });
 const port = process.env.PORT; //5002
+app.use(cors());
 (0, connection_1.default)();
 app.use(Routes_1.default);
 // demo
@@ -21,7 +22,6 @@ app.get("/", (req, res) => {
 app.get("/hi", (req, res) => {
     res.send("hii expressss");
 });
-app.use(cors());
 app.listen(port, () => {
     console.log(`[server]: hello, my Server is running at http://localhost:${port}`);
 });

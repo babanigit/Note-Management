@@ -10,7 +10,7 @@ const SignIn: React.FC = () => {
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch("/login", {
+      const res = await fetch("https://ts-nodejs-server1-typescript.onrender.com/login", {
  
         method: "POST",
         headers: {
@@ -29,7 +29,7 @@ const SignIn: React.FC = () => {
       } else {
         console.log("login successful");
         alert("Login successful");
-        // history("/home", { replace: true });
+        history("/home", { replace: true });
       }
     } catch (error) {
       console.error(error);
