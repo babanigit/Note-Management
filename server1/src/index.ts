@@ -16,6 +16,9 @@ app.use(express.json());
 dotenv.config({path:"./.env"});
 const port = process.env.PORT //5002
 
+app.use(cors());
+
+
 connectDb();
 
 app.use(router);  
@@ -29,7 +32,6 @@ app.get("/hi", (req: Request, res: Response) => {
   res.send("hii expressss");
 });
 
-app.use(cors());
 
 
 app.listen(port, () => {
