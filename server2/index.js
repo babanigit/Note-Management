@@ -9,6 +9,8 @@ const dotenv = require("dotenv");
 
 dotenv.config({path:"./.env"});
 
+app.use(cors());
+
 const connectDb =  require("./db/connection");
 connectDb()
 
@@ -30,7 +32,7 @@ app.get("/hi", (req, res) => {
   res.send("hii expressss");
 });
 
-app.use(cors());
+
 
 app.listen(port, () => {
   console.log(

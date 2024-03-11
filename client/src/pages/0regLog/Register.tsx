@@ -47,8 +47,8 @@ const Register: React.FC = () => {
     e.preventDefault();
     const { name, email, phone, passwd, cPasswd } = user;
 
-    const res = await fetch("/register", {
-      // mode:"no-cors",
+    const res = await fetch("https://ts-nodejs-server2.onrender.com/register", {
+
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -60,7 +60,7 @@ const Register: React.FC = () => {
     try {
       
        const data = await res.json();
-
+       
        console.log(data)
 
        if (data.Status === 422 || !data) {

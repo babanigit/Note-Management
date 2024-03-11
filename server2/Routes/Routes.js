@@ -52,7 +52,7 @@ router.post("/register", async (req, res) => {
       const user = new User({ name, email, phone, passwd, cPasswd });
 
       // password hashing
-      await user.save();
+      // await user.save();
     }
 
     res
