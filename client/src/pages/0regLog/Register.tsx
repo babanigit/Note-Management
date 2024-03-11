@@ -24,8 +24,10 @@ interface User2 {
 
 interface RegistrationResponse {
   message: string;
+  error: string;
   user: User2;
   token: string;
+  Status:number;
 }
 
 const Register: React.FC = () => {
@@ -59,16 +61,17 @@ const Register: React.FC = () => {
     
     try {
       
-       const data = await res.json();
+       const data:RegistrationResponse = await res.json();
        
        console.log(data)
 
-       if (data.Status === 422 || !data) {
-         window.alert("Invalid Registration");
-       } else {
-         window.alert("Successful Registration");
+      //  if (data.Status === 422 || !data) {
+      //    window.alert(data);
+      //  } 
+      //  else {
+         window.alert(data.message || data.error);
          // history("/home", { replace: true });
-       }
+      //  }
 
     } catch (error) {
       console.error(error)
