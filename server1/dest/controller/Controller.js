@@ -24,13 +24,15 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         }
         else {
             // const userExist= await User.findOne({email:email});
-            if (yield userSchema_1.default.findOne({ email: email })) {
+            const userAvailable = yield userSchema_1.default.findOne({ email });
+            if (userAvailable) {
                 res
                     .status(400)
                     .json({ message: `user ${email} is already registered` });
             }
             else {
                 const hashedPasswd = yield bcrypt_1.default.hash(passwd, 10);
+                // create the user in data base
                 const user = yield userSchema_1.default.create({
                     name,
                     email,
@@ -38,7 +40,9 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                     passwd: hashedPasswd,
                     cPasswd: hashedPasswd,
                 });
+                console.log(`user Created ${email}`);
                 // const accessToken = await getRegister.generateToken() ;
+                // generate token
                 const accessToken = jsonwebtoken_1.default.sign({
                     user: {
                         name: user.name,
@@ -46,13 +50,17 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                         userId: user._id.toString(),
                     },
                 }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "20d" });
+                if (user) {
+                    res.status(200).json({
+                        message: `registration successful ${name}`,
+                        user: user,
+                        token: accessToken,
+                    });
+                }
+                else {
+                    res.status(400).json({ message: "user data invalid" });
+                }
                 console.log("register successful");
-                // response that will go to frontend....
-                res.status(200).json({
-                    message: `registration successful from server `,
-                    user: user,
-                    token: accessToken,
-                });
             }
         }
     }

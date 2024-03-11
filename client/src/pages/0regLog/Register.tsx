@@ -49,7 +49,10 @@ const Register: React.FC = () => {
     e.preventDefault();
     const { name, email, phone, passwd, cPasswd } = user;
 
-    const res = await fetch("https://ts-nodejs-server1-typescript.onrender.com/register", {
+    // const backendLink = "https://ts-nodejs-server1-typescript.onrender.com/register"
+    const backendLink = "/register"
+
+    const res = await fetch("/register", {
 
       method: "POST",
       headers: {
@@ -64,17 +67,18 @@ const Register: React.FC = () => {
        const data:RegistrationResponse = await res.json();
        
        console.log(data)
-       console.log(data.Status)
-      //  if (data.Status === 422 || !data) {
+
+       //  if (data.Status === 422 || !data) {
       //    window.alert(data);
       //  } 
       //  else {
 
       if (data.Status===400) {
-        window.alert(data.message || data.error);
+        // window.alert(data.message || data.error);
       }else {
         window.alert(data.message || data.error);
-        history("/home", { replace: true });
+        window.localStorage.setItem("token", data.token);
+        // history("/home", { replace: true });
       }
 
      

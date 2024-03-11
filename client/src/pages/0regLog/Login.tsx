@@ -10,7 +10,11 @@ const SignIn: React.FC = () => {
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch("https://ts-nodejs-server1-typescript.onrender.com/login", {
+
+      // const backendLink = "https://ts-nodejs-server1-typescript.onrender.com/login"
+      const backendLink = "/login"
+
+      const res = await fetch(backendLink, {
  
         method: "POST",
         headers: {
@@ -28,8 +32,9 @@ const SignIn: React.FC = () => {
         setError("Invalid data");
       } else {
         console.log("login successful");
+        window.localStorage.setItem("token", data.token);
         alert("Login successful");
-        history("/home", { replace: true });
+        // history("/home", { replace: true });
       }
     } catch (error) {
       console.error(error);

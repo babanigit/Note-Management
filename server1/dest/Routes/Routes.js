@@ -13,14 +13,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const router = express_1.default.Router();
-const { getData, getData2, getRegister, getLogin } = require("../controller/Controller");
-router.route("/register").post(getRegister);
-router.route("/login").post(getLogin);
-// for login2
 const userSchema_1 = __importDefault(require("../model/userSchema"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const router = express_1.default.Router();
+const { getData, getData2, getRegister, getLogin } = require("../controller/Controller");
+// Registration
+router.route("/register").post(getRegister);
+// login
+router.route("/login").post(getLogin);
+// for login2
 router.post("/login2", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, passwd } = yield req.body;

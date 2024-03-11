@@ -1,16 +1,21 @@
 import express, { Express, Response, Request } from "express";
-const router = express.Router();
-const { getData, getData2, getRegister, getLogin } = require("../controller/Controller");
 
-router.route("/register").post(getRegister)
-router.route("/login").post(getLogin)
-
-
-// for login2
 import User from "../model/userSchema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+const router = express.Router();
+
+const { getData, getData2, getRegister, getLogin } = require("../controller/Controller");
+
+// Registration
+router.route("/register").post(getRegister)
+
+// login
+router.route("/login").post(getLogin)
+
+
+// for login2
 router.post("/login2", async (req: Request, res: Response): Promise<void> => {
     try {
       interface IUser {

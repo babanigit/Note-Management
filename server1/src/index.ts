@@ -7,10 +7,6 @@ import connectDb from "./db/connection";
 import utilEnv from "./util/validateEnv";
 const cors = require("cors");
 
-
-
-
-
 const app: Express = express();
 app.use(express.json());
 dotenv.config({path:"./.env"});

@@ -12,16 +12,21 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
     const { name, email, phone, passwd, cPasswd } = await req.body;
     if (!name || !email || !phone || !passwd || !cPasswd) {
       res.status(422).json({ error: "pls fill the registration form" });
+
+
     } else {
       // const userExist= await User.findOne({email:email});
 
-      if (await User.findOne({ email: email })) {
+      const userAvailable= await User.findOne({email});
+      if (userAvailable) {
         res
           .status(400)
           .json({ message: `user ${email} is already registered` });
+
       } else {
         const hashedPasswd = await bcrypt.hash(passwd, 10);
 
+        // create the user in data base
         const user = await User.create({
           name,
           email,
@@ -30,8 +35,11 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
           cPasswd: hashedPasswd,
         });
 
+        console.log(`user Created ${email}`)
+
         // const accessToken = await getRegister.generateToken() ;
 
+        // generate token
         const accessToken = jwt.sign(
           {
             user: {
@@ -44,14 +52,20 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
           { expiresIn: "20d" }
         );
 
-        console.log("register successful");
 
-        // response that will go to frontend....
-        res.status(200).json({
-          message: `registration successful from server `,
-          user: user,
-          token: accessToken,
-        });
+        if (user) {
+          res.status(200).json({
+            message: `registration successful ${name}`,
+            user: user,
+            token:accessToken,
+          });
+          
+        }else{
+          res.status(400).json({ message: "user data invalid" });
+        }
+
+        console.log("register successful");
+      
       }
     }
   } catch (error) {
