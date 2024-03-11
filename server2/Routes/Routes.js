@@ -19,7 +19,7 @@ const jwt = require("jsonwebtoken");
 // router.route("/register").post(getRegister);
 // router.route("/login").post(getLogin);
 
-router.post("/register", async (req, res) => {
+router.post("https://ts-nodejs-server2.onrender.com/register", async (req, res) => {
 
   try {
 
@@ -45,21 +45,25 @@ router.post("/register", async (req, res) => {
     console.log(userExist);
 
     if (userExist)
-      return res.status(422).json({ error: "email already registered" });
+      return res.status(422).json({ error: "email already registereddd" });
     else if (passwd != cPasswd)
       return res.status(422).json({ error: "password are not matching " });
     else {
       const user = new User({ name, email, phone, passwd, cPasswd });
 
       // password hashing
-      // await user.save();
+      await user.save();
+
+      res
+      .status(201)
+      .json({ message: "user registered successfully in backendddddd" } );
     }
 
-    res
-      .status(201)
-      .json({ message: "user registered successfully in backend" } );
+   
       
   }
+
+  
   } catch (err) {
     console.log(err);
   }
