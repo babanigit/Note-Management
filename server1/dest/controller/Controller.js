@@ -20,19 +20,22 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const { name, email, phone, passwd, cPasswd } = yield req.body;
         if (!name || !email || !phone || !passwd || !cPasswd) {
-            res.status(422).json({ error: "pls fill the registration form" });
+            res.status(422).json({
+                error: "pls fill the registration form",
+                process: 0,
+            });
         }
         else {
             // const userExist= await User.findOne({email:email});
             const userAvailable = yield userSchema_1.default.findOne({ email });
             if (userAvailable) {
-                res
-                    .status(400)
-                    .json({ message: `user ${email} is already registered` });
+                res.status(400).json({
+                    message: `user ${email} is already registered`,
+                    process: 1,
+                });
             }
             else {
                 const hashedPasswd = yield bcrypt_1.default.hash(passwd, 10);
-                // create the user in data base
                 const user = yield userSchema_1.default.create({
                     name,
                     email,
@@ -55,10 +58,14 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                         message: `registration successful ${name}`,
                         user: user,
                         token: accessToken,
+                        process: 1,
                     });
                 }
                 else {
-                    res.status(400).json({ message: "user data invalid" });
+                    res.status(400).json({
+                        message: "user data invalid",
+                        process: 0,
+                    });
                 }
                 console.log("register successful");
             }
@@ -72,13 +79,14 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 const getLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, passwd } = yield req.body;
-        console.log(email, passwd);
         if (!email || !passwd) {
-            res.status(400).json({ message: "all field required" });
+            res.status(400).json({
+                message: "all field required",
+                process: 0,
+            });
         }
         else {
             const user = yield userSchema_1.default.findOne({ email });
-            console.log(user === null || user === void 0 ? void 0 : user._id);
             if (user && (yield bcrypt_1.default.compare(passwd, user.passwd))) {
                 // token
                 const accessToken = jsonwebtoken_1.default.sign({
@@ -93,15 +101,18 @@ const getLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 //   expires: new Date(Date.now() + 2589000000),
                 //   httpOnly: true,
                 // });
-                console.log("login successful");
                 res.status(200).json({
                     user: user,
                     message: "Login successful from server",
                     token: accessToken,
+                    process: 1,
                 });
             }
             else {
-                res.status(404).json({ message: " invalid credentials " });
+                res.status(404).json({
+                    message: " invalid credentials ",
+                    process: 0,
+                });
             }
         }
     }

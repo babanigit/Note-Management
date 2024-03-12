@@ -21,7 +21,7 @@ app.use(router);
 
 // demo
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+  res.send("Express + TypeScript Server is live");
 });
 
 app.get("/hi", (req: Request, res: Response) => {

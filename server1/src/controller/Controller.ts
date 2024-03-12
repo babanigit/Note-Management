@@ -8,25 +8,23 @@ import { error } from "console";
 
 const getRegister = async (req: Request, res: Response): Promise<void> => {
   try {
-
     const { name, email, phone, passwd, cPasswd } = await req.body;
     if (!name || !email || !phone || !passwd || !cPasswd) {
-      res.status(422).json({ error: "pls fill the registration form" });
-
-
+      res.status(422).json({
+        error: "pls fill the registration form",
+        process: 0,
+      });
     } else {
       // const userExist= await User.findOne({email:email});
 
-      const userAvailable= await User.findOne({email});
+      const userAvailable = await User.findOne({ email });
       if (userAvailable) {
-        res
-          .status(400)
-          .json({ message: `user ${email} is already registered` });
-
+        res.status(400).json({
+          message: `user ${email} is already registered`,
+          process: 1,
+        });
       } else {
         const hashedPasswd = await bcrypt.hash(passwd, 10);
-
-        // create the user in data base
         const user = await User.create({
           name,
           email,
@@ -35,7 +33,7 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
           cPasswd: hashedPasswd,
         });
 
-        console.log(`user Created ${email}`)
+        console.log(`user Created ${email}`);
 
         // const accessToken = await getRegister.generateToken() ;
 
@@ -52,20 +50,21 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
           { expiresIn: "20d" }
         );
 
-
         if (user) {
           res.status(200).json({
             message: `registration successful ${name}`,
             user: user,
-            token:accessToken,
+            token: accessToken,
+            process: 1,
           });
-          
-        }else{
-          res.status(400).json({ message: "user data invalid" });
+        } else {
+          res.status(400).json({
+            message: "user data invalid",
+            process: 0,
+          });
         }
 
         console.log("register successful");
-      
       }
     }
   } catch (error) {
@@ -83,21 +82,15 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
       _id: string;
     }
 
-
     const { email, passwd } = await req.body;
 
-    console.log(email,passwd)
-
     if (!email || !passwd) {
-      res.status(400).json({ message: "all field required" });
-
-
+      res.status(400).json({
+        message: "all field required",
+        process: 0,
+      });
     } else {
       const user: IUser | null = await User.findOne({ email });
-
-
-      console.log(user?._id);
-
 
       if (user && (await bcrypt.compare(passwd, user.passwd))) {
         // token
@@ -113,25 +106,23 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
           { expiresIn: "20d" }
         );
 
-
         // // cookie
         // res.cookie("jwtTokenBablu", accessToken, {
         //   expires: new Date(Date.now() + 2589000000),
         //   httpOnly: true,
         // });
 
-        console.log("login successful");
-
         res.status(200).json({
           user: user,
           message: "Login successful from server",
           token: accessToken,
+          process: 1,
         });
-
-        
-
       } else {
-        res.status(404).json({ message: " invalid credentials " });
+        res.status(404).json({
+          message: " invalid credentials ",
+          process: 0,
+        });
       }
     }
   } catch (error) {

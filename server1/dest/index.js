@@ -17,7 +17,7 @@ app.use(cors());
 app.use(Routes_1.default);
 // demo
 app.get("/", (req, res) => {
-    res.send("Express + TypeScript Server");
+    res.send("Express + TypeScript Server is live");
 });
 app.get("/hi", (req, res) => {
     res.send("hii expressss");

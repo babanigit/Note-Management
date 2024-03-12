@@ -1,6 +1,13 @@
 import React, { useState, FormEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
+interface Idata {
+  process:number;
+  token:string;
+  message:string;
+  error:string;
+}
+
 const SignIn: React.FC = () => {
   const history = useNavigate();
   const [email, setEmail] = useState<string>("");
@@ -25,17 +32,31 @@ const SignIn: React.FC = () => {
           passwd,
         }),
       });
-      const data = await res.json();
+      const data:Idata = await res.json();
       console.log("data", data);
-      if (res.status === 400 || !data) {
-        console.log("invalid data");
-        setError("Invalid data");
-      } else {
-        console.log("login successful");
+
+
+      if (data.process) {
+        window.alert(data.message || data.error);
         window.localStorage.setItem("token", data.token);
-        alert("Login successful");
-        // history("/home", { replace: true });
+        history("/home", { replace: true });
+      
+      }else {
+       window.alert(data.message || data.error);
       }
+
+
+      // if (res.status === 400 || !data) {
+      //   console.log("invalid data");
+      //   setError("Invalid data");
+      // } else {
+      //   console.log("login successful");
+      //   window.localStorage.setItem("token", data.token);
+      //   alert("Login successful");
+      //   // history("/home", { replace: true });
+      // }
+
+
     } catch (error) {
       console.error(error);
       console.log("error in signin.jsx");
@@ -81,7 +102,7 @@ const SignIn: React.FC = () => {
               </div>
               <p className="py-4 mt-8">
                 <span className="text-gray-600">New to website?</span>{" "}
-                <Link to="/">Sign Up</Link>
+                <Link to="/register">Sign Up</Link>
               </p>
             </form>
           </div>

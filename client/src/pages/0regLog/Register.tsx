@@ -28,6 +28,7 @@ interface RegistrationResponse {
   user: User2;
   token: string;
   Status:any;
+  process:number
 }
 
 const Register: React.FC = () => {
@@ -51,8 +52,7 @@ const Register: React.FC = () => {
 
     // const backendLink = "https://ts-nodejs-server1-typescript.onrender.com/register"
     const backendLink = "/register"
-
-    const res = await fetch("/register", {
+    const res = await fetch(backendLink, {
 
       method: "POST",
       headers: {
@@ -67,18 +67,20 @@ const Register: React.FC = () => {
        const data:RegistrationResponse = await res.json();
        
        console.log(data)
+       console.log("process", data.process)
 
        //  if (data.Status === 422 || !data) {
       //    window.alert(data);
       //  } 
       //  else {
 
-      if (data.Status===400) {
-        // window.alert(data.message || data.error);
-      }else {
+      if (data.process) {
         window.alert(data.message || data.error);
         window.localStorage.setItem("token", data.token);
-        // history("/home", { replace: true });
+        history("/login", { replace: true });
+      
+      }else {
+       window.alert(data.message || data.error);
       }
 
      

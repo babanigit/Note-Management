@@ -7,7 +7,6 @@ const connectDb = async ():Promise<void> => {
 
     const DB: string | undefined = process.env.DATABASE;
 
-
     if (!DB) {
       throw new Error("Database connection string is not provided.");
     }
