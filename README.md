@@ -1,7 +1,12 @@
 # Ts-nodejs
 
-Note : - I would like to bring to your attention that the current project is still in the development phase and requires further attention to resolve TypeScript, networks errors and bugs. As I continue to enhance the application
+backend API :- https://ts-nodejs-server1-typescript.onrender.com (deployed on Render.com)
+
+Note : - The backend Express API has been successfully completed and seamlessly connected to the frontend React application, all developed using TypeScript. With this integration in place, the foundation for a robust and efficient web application has been laid.
+
+Now, the focus shifts to crafting the frontend user interface, where the user experience truly comes to life. By leveraging the power of React and TypeScript, we aim to create an intuitive and visually appealing interface that enhances user interaction and engagement.
+
+![ss1](ss/ts-node1.png)
+<!-- ![ss2](ss/mern2.png) -->
 
 
-working on server rn :)
-link- https://ts-nodejs-server.vercel.app
