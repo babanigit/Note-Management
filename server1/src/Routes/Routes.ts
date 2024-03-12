@@ -15,7 +15,7 @@ router.route("/register").post(getRegister)
 router.route("/login").post(getLogin)
 
 
-// for login2
+// for login2 (this is for demo)
 router.post("/login2", async (req: Request, res: Response): Promise<void> => {
     try {
       interface IUser {
@@ -73,10 +73,10 @@ router.post("/login2", async (req: Request, res: Response): Promise<void> => {
     }
   })
 
+
+  // demo routes
 router.route("/trail").get(getData);
-
 router.route("/getdata").post(getData2);
-
 router.route("/demo").post(async (req, res) => {});
 
 //   module.exports ={

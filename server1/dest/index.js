@@ -17,9 +17,21 @@ app.use(cors());
 app.use(Routes_1.default);
 // demo
 app.get("/", (req, res) => {
-    res.send("Express + TypeScript Server is live");
+    res.status(200).json({
+        message: "Express.js + Typescript server is live "
+    });
 });
-app.get("/hi", (req, res) => {
+app.get("/register", (req, res) => {
+    res.status(200).json({
+        message: "into the registration "
+    });
+});
+app.get("/Login", (req, res) => {
+    res.status(200).json({
+        message: "into the Login "
+    });
+});
+app.get("/hii", (req, res) => {
     res.send("hii expressss");
 });
 app.listen(port, () => {

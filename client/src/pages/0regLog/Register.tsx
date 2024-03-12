@@ -50,8 +50,8 @@ const Register: React.FC = () => {
     e.preventDefault();
     const { name, email, phone, passwd, cPasswd } = user;
 
-    // const backendLink = "https://ts-nodejs-server1-typescript.onrender.com/register"
-    const backendLink = "/register"
+    const backendLink = "https://ts-nodejs-server1-typescript.onrender.com/register"
+    // const backendLink = "/register"
     const res = await fetch(backendLink, {
 
       method: "POST",

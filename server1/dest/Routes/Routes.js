@@ -22,7 +22,7 @@ const { getData, getData2, getRegister, getLogin } = require("../controller/Cont
 router.route("/register").post(getRegister);
 // login
 router.route("/login").post(getLogin);
-// for login2
+// for login2 (this is for demo)
 router.post("/login2", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, passwd } = yield req.body;
@@ -64,6 +64,7 @@ router.post("/login2", (req, res) => __awaiter(void 0, void 0, void 0, function*
         console.error(error);
     }
 }));
+// demo routes
 router.route("/trail").get(getData);
 router.route("/getdata").post(getData2);
 router.route("/demo").post((req, res) => __awaiter(void 0, void 0, void 0, function* () { }));

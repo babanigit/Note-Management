@@ -21,10 +21,24 @@ app.use(router);
 
 // demo
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server is live");
+  res.status(200).json({
+    message:"Express.js + Typescript server is live "
+  })
 });
 
-app.get("/hi", (req: Request, res: Response) => {
+app.get("/register", (req: Request, res: Response) => {
+  res.status(200).json({
+    message:"into the registration "
+  })
+});
+
+app.get("/Login", (req: Request, res: Response) => {
+  res.status(200).json({
+    message:"into the Login "
+  })
+});
+
+app.get("/hii", (req: Request, res: Response) => {
   res.send("hii expressss");
 });
 
