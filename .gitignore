@@ -1,6 +1,6 @@
 
-/server1/node_modules/
-/server1/.env
+/server/node_modules/
+/server/.env
 
 /server2/node_modules/
 /server2/.env
