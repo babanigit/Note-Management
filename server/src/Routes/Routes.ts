@@ -10,7 +10,6 @@ import { getData, getData2, getRegister, getLogin } from "../controller/Controll
 
 // Registration
 router.route("/register").post(getRegister)
-
 // login
 router.route("/login").post(getLogin)
 

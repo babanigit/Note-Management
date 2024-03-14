@@ -44,5 +44,5 @@ const userSchema = new mongoose_1.default.Schema({
 //         );
 //     return
 // }
-const User = mongoose_1.default.model("User", userSchema);
+const User = mongoose_1.default.model("notesData", userSchema);
 exports.default = User;

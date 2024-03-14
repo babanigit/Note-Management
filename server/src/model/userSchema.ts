@@ -1,12 +1,7 @@
-
-
 import mongoose from "mongoose";
 const jwt =require("jsonwebtoken");
 
-
-
 const userSchema= new mongoose.Schema({
-
     name:{
         type:String,
         require:true
@@ -47,12 +42,10 @@ const userSchema= new mongoose.Schema({
 //           process.env.ACCESS_TOKEN_SECRET!,
 //           { expiresIn: "20d" }
 //         );
-    
 
 //     return
 // }
 
 
-
-const User = mongoose.model("User",userSchema)
+const User = mongoose.model("notesData",userSchema)
 export default User;
