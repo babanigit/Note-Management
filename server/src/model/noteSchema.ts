@@ -1,28 +1,30 @@
-import mongoose from "mongoose";
-const jwt =require("jsonwebtoken");
+import mongoose, { InferSchemaType } from "mongoose";
+// import jwt from "jsonwebtoken";
 
-const userSchema= new mongoose.Schema({
-    name:{
+const noteSchema= new mongoose.Schema({
+    title:{
         type:String,
         require:true
     },
-    email:{
+    text:{
         type:String,
         require:true
     },
-    passwd:{
-        type:String,
-        require:true
-    },
+    // passwd:{
+    //     type:String,
+    //     require:true
+    // },
 
-    cPasswd:{
-        type:String,
-        require:true
-    },
+    // cPasswd:{
+    //     type:String,
+    //     require:true
+    // },
 
 },{
     timestamps:true,
 })
+
+type Note= InferSchemaType<typeof noteSchema>;
 
 // // generate token   '
 // userSchema.methods.generateToken=async function () {
@@ -43,5 +45,6 @@ const userSchema= new mongoose.Schema({
 // }
 
 
-const User = mongoose.model("UserData",userSchema)
+const User = mongoose.model<Note>("notesData",noteSchema);
+
 export default User;

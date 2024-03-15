@@ -4,24 +4,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const jwt = require("jsonwebtoken");
-const userSchema = new mongoose_1.default.Schema({
-    name: {
+// import jwt from "jsonwebtoken";
+const noteSchema = new mongoose_1.default.Schema({
+    title: {
         type: String,
         require: true
     },
-    email: {
+    text: {
         type: String,
         require: true
     },
-    passwd: {
-        type: String,
-        require: true
-    },
-    cPasswd: {
-        type: String,
-        require: true
-    },
+    // passwd:{
+    //     type:String,
+    //     require:true
+    // },
+    // cPasswd:{
+    //     type:String,
+    //     require:true
+    // },
 }, {
     timestamps: true,
 });
@@ -40,5 +40,5 @@ const userSchema = new mongoose_1.default.Schema({
 //         );
 //     return
 // }
-const User = mongoose_1.default.model("UserData", userSchema);
+const User = mongoose_1.default.model("notesData", noteSchema);
 exports.default = User;

@@ -8,8 +8,8 @@ import { error } from "console";
 
 const getRegister = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name, email, phone, passwd, cPasswd } = await req.body;
-    if (!name || !email || !phone || !passwd || !cPasswd) {
+    const { name, email, passwd, cPasswd } = await req.body;
+    if (!name || !email || !passwd || !cPasswd) {
       res.status(422).json({
         error: "pls fill the registration form",
         process: 0,
@@ -28,7 +28,6 @@ const getRegister = async (req: Request, res: Response): Promise<void> => {
         const user = await User.create({
           name,
           email,
-          phone,
           passwd: hashedPasswd,
           cPasswd: hashedPasswd,
         });

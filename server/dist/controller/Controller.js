@@ -19,8 +19,8 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, email, phone, passwd, cPasswd } = yield req.body;
-        if (!name || !email || !phone || !passwd || !cPasswd) {
+        const { name, email, passwd, cPasswd } = yield req.body;
+        if (!name || !email || !passwd || !cPasswd) {
             res.status(422).json({
                 error: "pls fill the registration form",
                 process: 0,
@@ -40,7 +40,6 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 const user = yield userSchema_1.default.create({
                     name,
                     email,
-                    phone,
                     passwd: hashedPasswd,
                     cPasswd: hashedPasswd,
                 });
