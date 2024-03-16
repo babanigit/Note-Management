@@ -26,7 +26,7 @@ const noteSchema= new mongoose.Schema({
 
 type Note= InferSchemaType<typeof noteSchema>;
 
-// // generate token   '
+// // generate token
 // userSchema.methods.generateToken=async function () {
 
 //     const accessToken = jwt.sign(
@@ -40,7 +40,6 @@ type Note= InferSchemaType<typeof noteSchema>;
 //           process.env.ACCESS_TOKEN_SECRET!,
 //           { expiresIn: "20d" }
 //         );
-
 //     return
 // }
 

@@ -25,7 +25,7 @@ const noteSchema = new mongoose_1.default.Schema({
 }, {
     timestamps: true,
 });
-// // generate token   '
+// // generate token
 // userSchema.methods.generateToken=async function () {
 //     const accessToken = jwt.sign(
 //           {

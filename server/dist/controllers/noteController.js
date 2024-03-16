@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createNotes = exports.getNote = exports.getNotes = void 0;
 const noteSchema_1 = __importDefault(require("../models/noteSchema"));
+const http_errors_1 = __importDefault(require("http-errors"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const getNotes = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // throw Error("Bazinga!");
@@ -26,12 +28,13 @@ const getNotes = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.getNotes = getNotes;
 const getNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // const title=req.body.title;
-    // const text=req.body.text;
     const noteId = req.params.noteId;
-    const { title, text } = req.body;
     try {
+        if (!mongoose_1.default.isValidObjectId(noteId))
+            throw (0, http_errors_1.default)(400, "invalid note id");
         const newNotes = yield noteSchema_1.default.findById(noteId).exec();
+        if (!newNotes)
+            throw (0, http_errors_1.default)(404, "note not found");
         res.status(201).json(newNotes);
     }
     catch (error) {
@@ -40,10 +43,10 @@ const getNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.getNote = getNote;
 const createNotes = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // const title=req.body.title;
-    // const text=req.body.text;
     const { title, text } = req.body;
     try {
+        if (!title)
+            throw (0, http_errors_1.default)(400, "note must have a title");
         const newNotes = yield noteSchema_1.default.create({
             title,
             text,
