@@ -1,14 +1,11 @@
 import express,{Express} from "express";
 
-
-import {
-    getNotes
-} from "../controllers/noteController"
-
+import * as NotesController from "../controllers/noteController"
 const router=express.Router()
 
 
-router.route("/").get(getNotes);
+router.route("/").get(NotesController.getNotes).post(NotesController.createNotes);
+router.route("/:noteId").get(NotesController.getNote);
 
 
 export default router;

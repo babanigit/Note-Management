@@ -2,6 +2,7 @@ import express, { Express, NextFunction, Request, Response } from "express";
 // import express,{Express,Request,Response} from "express"
 import cors from "cors";
 import dotenv from "dotenv";
+import morgan from "morgan";
 import connectDb from "./db/connection";
 
 import noteRoutes from "./Routes/noteRoutes";
@@ -9,6 +10,8 @@ import noteRoutes from "./Routes/noteRoutes";
 dotenv.config({ path: "./.env" });
 const port = process.env.PORT;
 const app: Express = express();
+
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(cors());
 
@@ -17,7 +20,7 @@ app.use(cors());
 connectDb();
 
 // routes
-app.use("/api", noteRoutes);
+app.use("/api/notes", noteRoutes);
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -29,10 +32,14 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
+
+// end point middleware
 app.use((res, req, next) => {
   next(Error("endpoint not found"));
 });
 
+
+// error handler middleware
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
   console.error(error);
   let errorMessage = "an unknown error occurred";
