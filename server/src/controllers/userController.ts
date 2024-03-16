@@ -1,7 +1,7 @@
 // all the functionality will come here
 
 import express, { Response, Express, Request, response } from "express";
-import User from "../model/userSchema";
+import User from "../models/userSchema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { error } from "console";

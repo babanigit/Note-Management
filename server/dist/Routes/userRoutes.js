@@ -13,15 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const userSchema_1 = __importDefault(require("../model/userSchema"));
+const userSchema_1 = __importDefault(require("../models/userSchema"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const router = express_1.default.Router();
-const Controller_1 = require("../controller/Controller");
+const userController_1 = require("../controllers/userController");
 // Registration
-router.route("/register").post(Controller_1.getRegister);
+router.route("/register").post(userController_1.getRegister);
 // login
-router.route("/login").post(Controller_1.getLogin);
+router.route("/login").post(userController_1.getLogin);
 // for login2 (this is for demo)
 router.post("/login2", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -65,8 +65,8 @@ router.post("/login2", (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 }));
 // demo routes
-router.route("/trail").get(Controller_1.getData);
-router.route("/getdata").post(Controller_1.getData2);
+router.route("/trail").get(userController_1.getData);
+router.route("/getdata").post(userController_1.getData2);
 router.route("/demo").post((req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
 //   module.exports ={
 //     router

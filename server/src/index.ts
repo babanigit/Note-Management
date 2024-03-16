@@ -1,15 +1,44 @@
-
-import app from "./app";
+import express, { Express, NextFunction, Request, Response } from "express";
+// import express,{Express,Request,Response} from "express"
+import cors from "cors";
+import dotenv from "dotenv";
 import connectDb from "./db/connection";
+
+import noteRoutes from "./Routes/noteRoutes";
+
+dotenv.config({ path: "./.env" });
+const port = process.env.PORT;
+const app: Express = express();
+app.use(express.json());
+app.use(cors());
+
 // import utilEnv from "./util/validateEnv";
-
-
-const port = process.env.PORT //5002
 
 connectDb();
 
+// routes
+app.use("/api", noteRoutes);
 
+app.get("/", (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.status(200).json({
+      message: "Express.js + Typescript server is live ",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
+app.use((res, req, next) => {
+  next(Error("endpoint not found"));
+});
+
+app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
+  console.error(error);
+  let errorMessage = "an unknown error occurred";
+  if (error instanceof Error) errorMessage = error.message;
+  res.status(500).json({ error: errorMessage });
+});
 
 app.listen(port, () => {
   console.log(

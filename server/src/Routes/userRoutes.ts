@@ -1,12 +1,12 @@
 import express, { Express, Response, Request } from "express";
 
-import User from "../model/userSchema";
+import User from "../models/userSchema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-import { getData, getData2, getRegister, getLogin } from "../controller/Controller";
+import { getData, getData2, getRegister, getLogin } from "../controllers/userController";
 
 // Registration
 router.route("/register").post(getRegister)
