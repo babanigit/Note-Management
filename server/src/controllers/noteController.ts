@@ -1,4 +1,4 @@
-import express,{ Express,NextFunction,Request,Response } from "express";
+import express,{ Express,NextFunction,Request,RequestHandler,Response } from "express";
 
 import NoteModel from "../models/noteSchema"
 import createHttpError from "http-errors";
@@ -54,4 +54,27 @@ export const getNotes =  async(req: Request, res: Response, next:NextFunction) =
     }
   }
 
+  export const updateNote:RequestHandler =  async(req , res , next) => {
+    const noteId= req.params.noteId;
+    const newTitle=req.body.title;
+    const newText=req.body.text;
+    try {
+
+      if(!mongoose.isValidObjectId(noteId)) throw createHttpError(400,"invalid note id")
+      if(!newTitle) throw createHttpError(400,"note must have a title")
+
+      const note=await NoteModel.findById(noteId).exec();
+
+      if (!note) throw createHttpError(404,"note not found");
+
+      note.title= newTitle;
+      note.text=newText;
+
+      const updateNote=await note.save();
+      res.status(201).json(updateNote)
+
+    } catch (error) {
+        next(error)
+    }
+  }
 

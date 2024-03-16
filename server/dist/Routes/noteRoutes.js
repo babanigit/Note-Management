@@ -30,5 +30,5 @@ const express_1 = __importDefault(require("express"));
 const NotesController = __importStar(require("../controllers/noteController"));
 const router = express_1.default.Router();
 router.route("/").get(NotesController.getNotes).post(NotesController.createNotes);
-router.route("/:noteId").get(NotesController.getNote);
+router.route("/:noteId").get(NotesController.getNote).patch(NotesController.updateNote);
 exports.default = router;

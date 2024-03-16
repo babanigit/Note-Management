@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createNotes = exports.getNote = exports.getNotes = void 0;
+exports.updateNote = exports.createNotes = exports.getNote = exports.getNotes = void 0;
 const noteSchema_1 = __importDefault(require("../models/noteSchema"));
 const http_errors_1 = __importDefault(require("http-errors"));
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -58,3 +58,25 @@ const createNotes = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.createNotes = createNotes;
+const updateNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const noteId = req.params.noteId;
+    const newTitle = req.body.title;
+    const newText = req.body.text;
+    try {
+        if (!mongoose_1.default.isValidObjectId(noteId))
+            throw (0, http_errors_1.default)(400, "invalid note id");
+        if (!newTitle)
+            throw (0, http_errors_1.default)(400, "note must have a title");
+        const note = yield noteSchema_1.default.findById(noteId).exec();
+        if (!note)
+            throw (0, http_errors_1.default)(404, "note not found");
+        note.title = newTitle;
+        note.text = newText;
+        const updateNote = yield note.save();
+        res.status(201).json(updateNote);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.updateNote = updateNote;
