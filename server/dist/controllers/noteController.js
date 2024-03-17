@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateNote = exports.createNotes = exports.getNote = exports.getNotes = void 0;
+exports.deleteNote = exports.updateNote = exports.createNotes = exports.getNote = exports.getNotes = void 0;
 const noteSchema_1 = __importDefault(require("../models/noteSchema"));
 const http_errors_1 = __importDefault(require("http-errors"));
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -80,3 +80,19 @@ const updateNote = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.updateNote = updateNote;
+const deleteNote = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const noteId = req.params.noteId;
+    try {
+        if (!mongoose_1.default.isValidObjectId(noteId))
+            throw (0, http_errors_1.default)(400, "invalid note id");
+        const note = yield noteSchema_1.default.findById(noteId).exec();
+        if (!note)
+            throw (0, http_errors_1.default)(404, "note not found");
+        yield note.deleteOne({ _id: noteId });
+        res.sendStatus(204);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.deleteNote = deleteNote;
