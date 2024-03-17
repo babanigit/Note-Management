@@ -19,8 +19,7 @@ const Note = ({ note ,className}:NoteProps) => {
         createdAt,
         updatedAt
     }= note;
-    console.log(createdAt)
-
+    
     let createdUpdatedText:string;
 
     if(updatedAt>createdAt) {

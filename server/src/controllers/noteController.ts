@@ -12,7 +12,6 @@ interface CreateNoteBody{
 export const getNotes =  async(req: Request, res: Response, next:NextFunction) => {
 
     try {
-        // throw Error("Bazinga!");
         const notes= await NoteModel.find().exec();
         res.status(200).json(notes);
     } catch (error) {
