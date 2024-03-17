@@ -2,40 +2,41 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { NoteModel } from "../../model/noteModel";
 import Note from "../../components/note/Note";
-import { Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
+
+import styles from "../../style/notePage.module.css"
 
 const Home = () => {
-  const[note,setNote]=useState<NoteModel[]>([]);
-  
-  useEffect(()=>{
+  const [note, setNote] = useState<NoteModel[]>([]);
 
+  useEffect(() => {
     async function loadNotes() {
-
       try {
-        const res= await fetch("http://localhost:5002/api/notes",{ method:"GET"})
-        const notes=await res.json();
-        setNote(notes)
+        const res = await fetch("http://localhost:5002/api/notes", {
+          method: "GET",
+        });
+        const notes = await res.json();
+        setNote(notes);
       } catch (error) {
-        console.error(error)
-        alert(error)
+        console.error(error);
+        alert(error);
       }
     }
+
     loadNotes();
-  },[]);
+  }, []);
 
   return (
     <>
-
-    <Container className=" h-auto  bg-blue-100">
-    <Row xs={1} md={2} xl={3} className=" "> 
-
-      { note.map(note=> (
-        <Note note={note} key={note._id} />
-      ))}
-
-    </Row>
-
-    </Container>
+      <Container className=" bg-blue-100">
+        <Row xs={1} md={2} xl={3}>
+          {note.map((note) => (
+            <Col className=" p-2" key={note._id}>
+              <Note note={note} className={styles.note}  />
+            </Col>
+          ))}
+        </Row>
+      </Container>
 
       {/* <div className=" h-screen grid place-items-center place-content-center ">
         <div>hello</div>

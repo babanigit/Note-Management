@@ -1,13 +1,16 @@
+import styles from "../../style/note.module.css"
 
 
 import React from 'react'
 import { NoteModel } from '../../model/noteModel'
 import { Card } from 'react-bootstrap';
+import { FormatDate } from "../../util/FormateData";
 
 interface NoteProps{
     note:NoteModel;
+    className?:string;
 }
-const Note = ({ note }:NoteProps) => {
+const Note = ({ note ,className}:NoteProps) => {
 
     const{
         _id,
@@ -16,18 +19,30 @@ const Note = ({ note }:NoteProps) => {
         createdAt,
         updatedAt
     }= note;
+    console.log(createdAt)
+
+    let createdUpdatedText:string;
+
+    if(updatedAt>createdAt) {
+        createdUpdatedText="updated: " + FormatDate(updatedAt);
+    }else{
+        createdUpdatedText="created: " +FormatDate(createdAt);
+    }
 
   return (
     <>
-    <Card className=' grid'>
-        <Card.Body className=' bg-yellow-100 grid rounded-lg '>
-            <Card.Title className=' bg-red-200 rounded-md'>
+    <Card className={`${styles.noteCard} ${className}`}>
+        <Card.Body className={` ${styles.cardBody}`}>
+            <Card.Title className=' bg-red-200 rounded-md '>
                 {title}
             </Card.Title>
-            <Card.Text> 
+            <Card.Text className={styles.cardText} > 
                 {text}
             </Card.Text>
         </Card.Body>
+        <Card.Footer className="text-muted">
+            {createdUpdatedText}
+        </Card.Footer>
     </Card>
     </>
     )
