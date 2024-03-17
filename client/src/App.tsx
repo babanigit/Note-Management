@@ -1,12 +1,12 @@
+// will implement theme here
 
 
-import React from 'react'
 import Main from './conteners/Main'
 
 const App = () => {
   return (
     <>
-    <div className='' >
+    <div >
       <Main/>
     </div>
     </>

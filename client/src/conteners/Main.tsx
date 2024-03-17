@@ -33,9 +33,9 @@ const Main = ():ReactElement => {
           <Route path="/login2" element={<Login2/>} />
 
          
-          <Route path="/home" element={<Protection />}>
+          {/* <Route path="/home" element={<Protection />}> */}
           <Route path="/home" element={<Home />} />
-          </Route>
+          {/* </Route> */}
           
           <Route path="/about" element={<Protection />}>
             <Route path="/about" element={<About/>} />
