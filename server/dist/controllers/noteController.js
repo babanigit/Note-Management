@@ -18,6 +18,7 @@ const http_errors_1 = __importDefault(require("http-errors"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const getNotes = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // throw createHttpError(401);
         const notes = yield noteSchema_1.default.find().exec();
         res.status(200).json(notes);
     }
