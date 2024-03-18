@@ -121,8 +121,6 @@ interface IUser {
 
 const getLogin: RequestHandler<unknown, unknown, IUser, unknown> = async (req, res, next) => {
 
-
-
   // const { userName, passwd } = await req.body;
 
   const userName = req.body.userName;
