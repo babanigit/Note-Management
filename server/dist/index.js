@@ -35,6 +35,8 @@ const connection_1 = __importDefault(require("./db/connection"));
 const noteRoutes_1 = __importDefault(require("./Routes/noteRoutes"));
 const userRoutes_1 = __importDefault(require("./Routes/userRoutes"));
 const http_errors_1 = __importStar(require("http-errors"));
+const express_session_1 = __importDefault(require("express-session"));
+const MongoStore = require("connect-mongo");
 dotenv_1.default.config({ path: "./.env" });
 const port = process.env.PORT;
 const app = (0, express_1.default)();
@@ -43,6 +45,18 @@ app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 // import utilEnv from "./util/validateEnv";
 (0, connection_1.default)();
+app.use((0, express_session_1.default)({
+    secret: process.env.SESSION_SECRET || " ",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 60 * 60 * 1000,
+    },
+    rolling: true,
+    store: MongoStore.create({
+        mongoUrl: process.env.DATABASE
+    })
+}));
 // routes
 app.use("/api/notes", noteRoutes_1.default);
 app.use("/api/users", userRoutes_1.default);

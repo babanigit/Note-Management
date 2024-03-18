@@ -1,52 +1,60 @@
 // all the functionality will come here
 
-import express, { Response, Express, Request, response, NextFunction } from "express";
+import express, { Response, Express, Request, response, NextFunction, RequestHandler } from "express";
 import User from "../models/userSchema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { error } from "console";
 import createHttpError from "http-errors";
 
-const getRegister = async (req: Request, res: Response,next:NextFunction): Promise<void> => {
+interface User {
+  _id: string;
+  userName: string;
+  email: string;
+  passwd: string;
+  cPasswd: string;
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
+}
+
+
+const getRegister = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { userName, email, passwd, cPasswd } = await req.body;  
+    const { userName, email, passwd, cPasswd } = await req.body;
     if (!userName || !email || !passwd || !cPasswd) {
 
-      res.status(200).json({message:"parameters missing"});
-      throw createHttpError(400,"parameters missing");
+      throw createHttpError(400, "parameters missing");
       res.status(422).json({
         error: "pls fill the registration form",
         process: 0,
       });
 
-    } 
-    
+    }
+
     else {
       // const userExist= await User.findOne({email:email});
 
-      const existingUserEmail = await User.findOne({ email:email });
+      const existingUserEmail = await User.findOne({ email: email });
       if (existingUserEmail) {
 
-        res.status(200).json({message:"email is already taken"});
-        throw createHttpError(409,"email is already taken!")
+        throw createHttpError(409, "email is already taken!")
         res.status(400).json({
           message: `user ${email} is already registered`,
           process: 1,
         });
-      } 
-      
-      const existingUserUserName = await User.findOne({ userName:userName });
+      }
+
+      const existingUserUserName = await User.findOne({ userName: userName });
       if (existingUserUserName) {
 
-        res.status(200).json({message:"username is already taken"});
-        throw createHttpError(409,"username is already taken!")
+        throw createHttpError(409, "username is already taken!")
       }
-      
+
       else {
 
-        if (passwd!==cPasswd) {
-          res.status(200).json({message:"confirm password is not matching"});
-          throw createHttpError(400,"confirm password is not matching")
+        if (passwd !== cPasswd) {
+          throw createHttpError(400, "confirm password is not matching")
         }
 
         // password hashing
@@ -58,6 +66,8 @@ const getRegister = async (req: Request, res: Response,next:NextFunction): Promi
           passwd: hashedPasswd,
           cPasswd: hashedPasswd,
         });
+
+        req.session.userId = newUser._id;
 
         res.status(200).json(newUser);
 
@@ -98,65 +108,59 @@ const getRegister = async (req: Request, res: Response,next:NextFunction): Promi
     }
 
   } catch (error) {
-    console.log("error in /register");
     console.error(error);
+    next(error)
   }
 };
 
-const getLogin = async (req: Request, res: Response): Promise<void> => {
+interface IUser {
+  passwd?: string;
+  userName?: string;
+}
+
+
+const getLogin: RequestHandler<unknown, unknown, IUser, unknown> = async (req, res, next) => {
+
+
+
+  // const { userName, passwd } = await req.body;
+
+  const userName = req.body.userName;
+  const passwd = req.body.passwd;
+
+
   try {
-    interface IUser {
-      email: string;
-      passwd: string;
-      userName: string;
-      _id: string;
-    }
+    if (!userName || !passwd) {
 
-    const { email, passwd } = await req.body;
-
-    if (!email || !passwd) {
+      throw createHttpError(400, "Parameters missing")
       res.status(400).json({
         message: "all field required",
         process: 0,
       });
+
     } else {
-      const user: IUser | null = await User.findOne({ email });
+      const user = await User.findOne({ userName: userName }).select("+passwd +email").exec();
 
-      if (user && (await bcrypt.compare(passwd, user.passwd))) {
-        // token
-        const accessToken = jwt.sign(
-          {
-            user: {
-              userName: user.userName,
-              email: user.email,
-              userId: user._id.toString(),
-            },
-          },
-          process.env.ACCESS_TOKEN_SECRET!,
-          { expiresIn: "20d" }
-        );
-
-        // // cookie
-        // res.cookie("jwtTokenBablu", accessToken, {
-        //   expires: new Date(Date.now() + 2589000000),
-        //   httpOnly: true,
-        // });
-
-        res.status(200).json({
-          user: user,
-          message: "Login successful from server",
-          token: accessToken,
-          process: 1,
-        });
-      } else {
-        res.status(404).json({
-          message: " invalid credentials ",
-          process: 0,
-        });
+      if (!user) {
+        throw createHttpError(401, "invalid credentials")
       }
+
+      if (typeof passwd !== 'string' || typeof user.passwd !== 'string') {
+        throw new Error("Password or user password is not a string");
+      }
+
+      const passwdMatch = bcrypt.compare(passwd, user.passwd);
+
+      if (!passwdMatch) {
+        throw createHttpError(401, "invalid credentials")
+      }
+      req.session.userId = user._id;
+      res.status(201).json(user)
+
     }
   } catch (error) {
-    console.log("error in /login");
+
+    next(error)
     console.error(error);
   }
 };

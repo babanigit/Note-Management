@@ -8,6 +8,8 @@ import connectDb from "./db/connection";
 import noteRoutes from "./Routes/noteRoutes";
 import userRouter from "./Routes/userRoutes";
 import createHttpError,{isHttpError} from "http-errors";
+import session from "express-session";
+import MongoStore = require("connect-mongo");
 
 dotenv.config({ path: "./.env" });
 const port = process.env.PORT;
@@ -20,6 +22,19 @@ app.use(cors());
 // import utilEnv from "./util/validateEnv";
 
 connectDb();
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || " ",
+  resave:false,
+  saveUninitialized:false,
+  cookie:{
+    maxAge:60 * 60 * 1000,
+  },
+  rolling:true,
+  store: MongoStore.create({
+    mongoUrl: process.env.DATABASE
+  })
+}));
 
 // routes
 app.use("/api/notes", noteRoutes);
