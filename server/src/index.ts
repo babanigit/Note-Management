@@ -21,7 +21,7 @@ app.use(cors());
 
 // import utilEnv from "./util/validateEnv";
 
-connectDb();
+  connectDb();
 
 app.use(session({
   secret: process.env.SESSION_SECRET || " ",

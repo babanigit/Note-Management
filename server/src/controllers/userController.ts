@@ -7,16 +7,34 @@ import jwt from "jsonwebtoken";
 import { error } from "console";
 import createHttpError from "http-errors";
 
-interface User {
-  _id: string;
-  userName: string;
-  email: string;
-  passwd: string;
-  cPasswd: string;
-  createdAt: Date;
-  updatedAt: Date;
-  __v: number;
+export const getAuthenticatedUser:RequestHandler = async(req,res,next)=> {
+
+  const getAuthenticated = req.session.userId;
+
+  try {
+    if(!getAuthenticated) {
+      throw createHttpError(401,"user not authenticated")
+    }
+    const user=await User.findById(getAuthenticated).select("+email").exec();
+    res.status(200).json(user)
+
+  } catch (error) {
+    next(error)
+    console.error(error)
+  }
 }
+
+
+// interface User {
+//   _id: string;
+//   userName: string;
+//   email: string;
+//   passwd: string;
+//   cPasswd: string;
+//   createdAt: Date;
+//   updatedAt: Date;
+//   __v: number;
+// }
 
 
 const getRegister = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -162,6 +180,18 @@ const getLogin: RequestHandler<unknown, unknown, IUser, unknown> = async (req, r
     console.error(error);
   }
 };
+
+// logout
+export const getLogout:RequestHandler= (req,res,next)=> {
+  req.session.destroy(error=>{
+    if (error) {
+      next(error)
+    }else {
+      res.sendStatus(200);
+    }
+  })
+}
+
 
 const getData = (req: Request, res: Response) => {
   res.status(200).json({ message: "get all contacts " });

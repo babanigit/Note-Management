@@ -13,10 +13,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getData2 = exports.getData = exports.getLogin = exports.getRegister = void 0;
+exports.getData2 = exports.getData = exports.getLogin = exports.getRegister = exports.getLogout = exports.getAuthenticatedUser = void 0;
 const userSchema_1 = __importDefault(require("../models/userSchema"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const http_errors_1 = __importDefault(require("http-errors"));
+const getAuthenticatedUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const getAuthenticated = req.session.userId;
+    try {
+        if (!getAuthenticated) {
+            throw (0, http_errors_1.default)(401, "user not authenticated");
+        }
+        const user = yield userSchema_1.default.findById(getAuthenticated).select("+email").exec();
+        res.status(200).json(user);
+    }
+    catch (error) {
+        next(error);
+        console.error(error);
+    }
+});
+exports.getAuthenticatedUser = getAuthenticatedUser;
+// interface User {
+//   _id: string;
+//   userName: string;
+//   email: string;
+//   passwd: string;
+//   cPasswd: string;
+//   createdAt: Date;
+//   updatedAt: Date;
+//   __v: number;
+// }
 const getRegister = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userName, email, passwd, cPasswd } = yield req.body;
@@ -126,6 +151,18 @@ const getLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.getLogin = getLogin;
+// logout
+const getLogout = (req, res, next) => {
+    req.session.destroy(error => {
+        if (error) {
+            next(error);
+        }
+        else {
+            res.sendStatus(200);
+        }
+    });
+};
+exports.getLogout = getLogout;
 const getData = (req, res) => {
     res.status(200).json({ message: "get all contacts " });
 };
