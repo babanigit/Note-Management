@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+import mongoose,{InferSchemaType,model,Schema} from "mongoose";
 const jwt =require("jsonwebtoken");
 
 const userSchema= new mongoose.Schema({
-    name:{
+    userName:{
         type:String,
         require:true
     },
@@ -24,24 +24,8 @@ const userSchema= new mongoose.Schema({
     timestamps:true,
 })
 
-// // generate token   '
-// userSchema.methods.generateToken=async function () {
-
-//     const accessToken = jwt.sign(
-//           {
-//             user: {
-//               name: user.name,
-//               email: user.email,
-//               userId: user._id.toString(),
-//             },
-//           },
-//           process.env.ACCESS_TOKEN_SECRET!,
-//           { expiresIn: "20d" }
-//         );
-
-//     return
-// }
+type user= InferSchemaType<typeof userSchema>;
 
 
-const User = mongoose.model("UserData",userSchema)
+const User = mongoose.model<user>("UserData",userSchema)
 export default User;

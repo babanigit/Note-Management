@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const jwt = require("jsonwebtoken");
 const userSchema = new mongoose_1.default.Schema({
-    name: {
+    userName: {
         type: String,
         require: true
     },
@@ -25,20 +25,5 @@ const userSchema = new mongoose_1.default.Schema({
 }, {
     timestamps: true,
 });
-// // generate token   '
-// userSchema.methods.generateToken=async function () {
-//     const accessToken = jwt.sign(
-//           {
-//             user: {
-//               name: user.name,
-//               email: user.email,
-//               userId: user._id.toString(),
-//             },
-//           },
-//           process.env.ACCESS_TOKEN_SECRET!,
-//           { expiresIn: "20d" }
-//         );
-//     return
-// }
 const User = mongoose_1.default.model("UserData", userSchema);
 exports.default = User;

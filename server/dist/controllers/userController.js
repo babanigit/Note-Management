@@ -17,10 +17,13 @@ exports.getData2 = exports.getData = exports.getLogin = exports.getRegister = vo
 const userSchema_1 = __importDefault(require("../models/userSchema"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const http_errors_1 = __importDefault(require("http-errors"));
+const getRegister = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, email, passwd, cPasswd } = yield req.body;
-        if (!name || !email || !passwd || !cPasswd) {
+        const { userName, email, passwd, cPasswd } = yield req.body;
+        if (!userName || !email || !passwd || !cPasswd) {
+            res.status(200).json({ message: "parameters missing" });
+            throw (0, http_errors_1.default)(400, "parameters missing");
             res.status(422).json({
                 error: "pls fill the registration form",
                 process: 0,
@@ -28,46 +31,62 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         }
         else {
             // const userExist= await User.findOne({email:email});
-            const userAvailable = yield userSchema_1.default.findOne({ email });
-            if (userAvailable) {
+            const existingUserEmail = yield userSchema_1.default.findOne({ email: email });
+            if (existingUserEmail) {
+                res.status(200).json({ message: "email is already taken" });
+                throw (0, http_errors_1.default)(409, "email is already taken!");
                 res.status(400).json({
                     message: `user ${email} is already registered`,
                     process: 1,
                 });
             }
+            const existingUserUserName = yield userSchema_1.default.findOne({ userName: userName });
+            if (existingUserUserName) {
+                res.status(200).json({ message: "username is already taken" });
+                throw (0, http_errors_1.default)(409, "username is already taken!");
+            }
             else {
+                if (passwd !== cPasswd) {
+                    res.status(200).json({ message: "confirm password is not matching" });
+                    throw (0, http_errors_1.default)(400, "confirm password is not matching");
+                }
+                // password hashing
                 const hashedPasswd = yield bcrypt_1.default.hash(passwd, 10);
-                const user = yield userSchema_1.default.create({
-                    name,
+                const newUser = yield userSchema_1.default.create({
+                    userName,
                     email,
                     passwd: hashedPasswd,
                     cPasswd: hashedPasswd,
                 });
-                console.log(`user Created ${email}`);
-                // const accessToken = await getRegister.generateToken() ;
-                // generate token
-                const accessToken = jsonwebtoken_1.default.sign({
-                    user: {
-                        name: user.name,
-                        email: user.email,
-                        userId: user._id.toString(),
-                    },
-                }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "20d" });
-                if (user) {
-                    res.status(200).json({
-                        message: `registration successful ${name}`,
-                        user: user,
-                        token: accessToken,
-                        process: 1,
-                    });
-                }
-                else {
-                    res.status(400).json({
-                        message: "user data invalid",
-                        process: 0,
-                    });
-                }
-                console.log("register successful");
+                res.status(200).json(newUser);
+                // console.log(`user Created ${email}`);
+                // res
+                // // generate token
+                // const accessToken = jwt.sign(
+                //   {
+                //     user: {
+                //       userName: newUser.username,
+                //       email: newUser.email,
+                //       userId: newUser._id.toString(),
+                //     },
+                //   },
+                //   process.env.ACCESS_TOKEN_SECRET!,
+                //   { expiresIn: "20d" }
+                // );
+                // if (newUser) {
+                //   res.status(200).json({
+                //     message: `registration successful ${userName}`,
+                //     user: newUser,
+                //     token: accessToken,
+                //     process: 1,
+                //   });
+                // } else {
+                //   res.status(400).json({
+                //     message: "user data invalid",
+                //     process: 0,
+                //   });
+                // }
+                // console.log("register successful");
             }
         }
     }
@@ -92,7 +111,7 @@ const getLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 // token
                 const accessToken = jsonwebtoken_1.default.sign({
                     user: {
-                        name: user.name,
+                        userName: user.userName,
                         email: user.email,
                         userId: user._id.toString(),
                     },
@@ -128,7 +147,7 @@ const getData = (req, res) => {
 };
 exports.getData = getData;
 const getData2 = (req, res) => {
-    const { name, phone } = req.body;
-    res.status(200).json({ message: `get all contacts ${name} and ${phone} ` });
+    const { userName, phone } = req.body;
+    res.status(200).json({ message: `get all contacts ${userName} and ${phone} ` });
 };
 exports.getData2 = getData2;

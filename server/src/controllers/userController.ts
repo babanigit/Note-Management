@@ -1,71 +1,102 @@
 // all the functionality will come here
 
-import express, { Response, Express, Request, response } from "express";
+import express, { Response, Express, Request, response, NextFunction } from "express";
 import User from "../models/userSchema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { error } from "console";
+import createHttpError from "http-errors";
 
-const getRegister = async (req: Request, res: Response): Promise<void> => {
+const getRegister = async (req: Request, res: Response,next:NextFunction): Promise<void> => {
   try {
-    const { name, email, passwd, cPasswd } = await req.body;
-    if (!name || !email || !passwd || !cPasswd) {
+    const { userName, email, passwd, cPasswd } = await req.body;  
+    if (!userName || !email || !passwd || !cPasswd) {
+
+      res.status(200).json({message:"parameters missing"});
+      throw createHttpError(400,"parameters missing");
       res.status(422).json({
         error: "pls fill the registration form",
         process: 0,
       });
-    } else {
+
+    } 
+    
+    else {
       // const userExist= await User.findOne({email:email});
 
-      const userAvailable = await User.findOne({ email });
-      if (userAvailable) {
+      const existingUserEmail = await User.findOne({ email:email });
+      if (existingUserEmail) {
+
+        res.status(200).json({message:"email is already taken"});
+        throw createHttpError(409,"email is already taken!")
         res.status(400).json({
           message: `user ${email} is already registered`,
           process: 1,
         });
-      } else {
+      } 
+      
+      const existingUserUserName = await User.findOne({ userName:userName });
+      if (existingUserUserName) {
+
+        res.status(200).json({message:"username is already taken"});
+        throw createHttpError(409,"username is already taken!")
+      }
+      
+      else {
+
+        if (passwd!==cPasswd) {
+          res.status(200).json({message:"confirm password is not matching"});
+          throw createHttpError(400,"confirm password is not matching")
+        }
+
+        // password hashing
         const hashedPasswd = await bcrypt.hash(passwd, 10);
-        const user = await User.create({
-          name,
+
+        const newUser = await User.create({
+          userName,
           email,
           passwd: hashedPasswd,
           cPasswd: hashedPasswd,
         });
 
-        console.log(`user Created ${email}`);
+        res.status(200).json(newUser);
 
-        // const accessToken = await getRegister.generateToken() ;
+        // console.log(`user Created ${email}`);
+        // res
 
-        // generate token
-        const accessToken = jwt.sign(
-          {
-            user: {
-              name: user.name,
-              email: user.email,
-              userId: user._id.toString(),
-            },
-          },
-          process.env.ACCESS_TOKEN_SECRET!,
-          { expiresIn: "20d" }
-        );
 
-        if (user) {
-          res.status(200).json({
-            message: `registration successful ${name}`,
-            user: user,
-            token: accessToken,
-            process: 1,
-          });
-        } else {
-          res.status(400).json({
-            message: "user data invalid",
-            process: 0,
-          });
-        }
+        // // generate token
+        // const accessToken = jwt.sign(
+        //   {
+        //     user: {
+        //       userName: newUser.username,
+        //       email: newUser.email,
+        //       userId: newUser._id.toString(),
+        //     },
+        //   },
+        //   process.env.ACCESS_TOKEN_SECRET!,
+        //   { expiresIn: "20d" }
+        // );
 
-        console.log("register successful");
+        // if (newUser) {
+        //   res.status(200).json({
+        //     message: `registration successful ${userName}`,
+        //     user: newUser,
+        //     token: accessToken,
+        //     process: 1,
+        //   });
+        // } else {
+        //   res.status(400).json({
+        //     message: "user data invalid",
+        //     process: 0,
+        //   });
+        // }
+
+        // console.log("register successful");
+
       }
     }
+
   } catch (error) {
     console.log("error in /register");
     console.error(error);
@@ -77,7 +108,7 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
     interface IUser {
       email: string;
       passwd: string;
-      name: string;
+      userName: string;
       _id: string;
     }
 
@@ -96,7 +127,7 @@ const getLogin = async (req: Request, res: Response): Promise<void> => {
         const accessToken = jwt.sign(
           {
             user: {
-              name: user.name,
+              userName: user.userName,
               email: user.email,
               userId: user._id.toString(),
             },
@@ -135,8 +166,8 @@ const getData = (req: Request, res: Response) => {
 };
 
 const getData2 = (req: Request, res: Response) => {
-  const { name, phone } = req.body;
-  res.status(200).json({ message: `get all contacts ${name} and ${phone} ` });
+  const { userName, phone } = req.body;
+  res.status(200).json({ message: `get all contacts ${userName} and ${phone} ` });
 };
 
 export {

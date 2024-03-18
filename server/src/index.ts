@@ -6,6 +6,7 @@ import morgan from "morgan";
 import connectDb from "./db/connection";
 
 import noteRoutes from "./Routes/noteRoutes";
+import userRouter from "./Routes/userRoutes";
 import createHttpError,{isHttpError} from "http-errors";
 
 dotenv.config({ path: "./.env" });
@@ -22,6 +23,7 @@ connectDb();
 
 // routes
 app.use("/api/notes", noteRoutes);
+app.use("/api/users", userRouter)
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
   try {

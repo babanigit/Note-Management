@@ -13,57 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const userSchema_1 = __importDefault(require("../models/userSchema"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const router = express_1.default.Router();
 const userController_1 = require("../controllers/userController");
 // Registration
 router.route("/register").post(userController_1.getRegister);
 // login
 router.route("/login").post(userController_1.getLogin);
-// for login2 (this is for demo)
-router.post("/login2", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { email, passwd } = yield req.body;
-        console.log(email, passwd);
-        if (!email || !passwd) {
-            res.status(422).json({ error: "pls fill the Login from login2" });
-        }
-        else {
-            const user = yield userSchema_1.default.findOne({ email });
-            console.log(user === null || user === void 0 ? void 0 : user._id);
-            if (user && (yield bcrypt_1.default.compare(passwd, user.passwd))) {
-                // token
-                const accessToken = jsonwebtoken_1.default.sign({
-                    user: {
-                        name: user.name,
-                        email: user.email,
-                        userId: user._id.toString(),
-                    },
-                }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "20d" });
-                // // cookie
-                // res.cookie("jwtTokenBablu", accessToken, {
-                //   expires: new Date(Date.now() + 2589000000),
-                //   httpOnly: true,
-                // });
-                console.log("login successful");
-                res.status(200).json({
-                    message: "Login successful from server",
-                    user: user,
-                    token: accessToken,
-                });
-            }
-            else {
-                res.json({ message: " invalid credentials " });
-            }
-        }
-    }
-    catch (error) {
-        console.log("error in /login2");
-        console.error(error);
-    }
-}));
 // demo routes
 router.route("/trail").get(userController_1.getData);
 router.route("/getdata").post(userController_1.getData2);

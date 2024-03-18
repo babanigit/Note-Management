@@ -33,6 +33,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const morgan_1 = __importDefault(require("morgan"));
 const connection_1 = __importDefault(require("./db/connection"));
 const noteRoutes_1 = __importDefault(require("./Routes/noteRoutes"));
+const userRoutes_1 = __importDefault(require("./Routes/userRoutes"));
 const http_errors_1 = __importStar(require("http-errors"));
 dotenv_1.default.config({ path: "./.env" });
 const port = process.env.PORT;
@@ -44,6 +45,7 @@ app.use((0, cors_1.default)());
 (0, connection_1.default)();
 // routes
 app.use("/api/notes", noteRoutes_1.default);
+app.use("/api/users", userRoutes_1.default);
 app.get("/", (req, res, next) => {
     try {
         res.status(200).json({
