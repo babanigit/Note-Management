@@ -50,6 +50,7 @@ export interface LoginCred {
     userName:string;
     passwd:string;
 }
+
 export async function getLoginUser(Credential:LoginCred):Promise<UserModel>{
 
     const res= await fetchData(userLink+"login",{

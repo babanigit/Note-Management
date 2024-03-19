@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { UserModel } from "../../model/userModel";
-import { RegisterCred } from "../../networks/note_api";
+import { LoginCred } from "../../networks/note_api";
 
 import * as NoteApi from "../../networks/note_api"
 import { Alert, Button, Form, Modal } from "react-bootstrap";
@@ -9,30 +9,28 @@ import { useState } from "react";
 
 import styleUtils from "../../style/utils.module.css"
 
-import { ConflictError } from "../errors/http-errors";
-
-// import {conflictError} from "../"
+import { UnauthorizedError } from "../errors/http-errors";
 
 
 
-interface RegisterModelProps {
+interface LoginModelProps {
     onDismiss: () => void;
     onLoginSuccessful: (user: UserModel) => void;
 }
 
-const LoginModel = ({ onDismiss, onLoginSuccessful }: RegisterModelProps) => {
+const LoginModel = ({ onDismiss, onLoginSuccessful }: LoginModelProps) => {
 
     const [errorText, setErrorText] = useState<string | null>(null);
 
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterCred>();
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginCred>();
 
-    async function onSubmit(credentials: RegisterCred) {
+    async function onSubmit(credentials:LoginCred) {
         try {
             const newUser = await NoteApi.getLoginUser(credentials);
             onLoginSuccessful(newUser!);
         } catch (error) {
 
-            if (error instanceof ConflictError) {
+            if (error instanceof UnauthorizedError) {
                 setErrorText(error.message);
             } else {
                 alert(error);
@@ -46,8 +44,6 @@ const LoginModel = ({ onDismiss, onLoginSuccessful }: RegisterModelProps) => {
 
     return (
         <>
-
-
             <Modal show onHide={onDismiss}>
                 <Modal.Header closeButton>
                     <Modal.Title>
@@ -72,7 +68,7 @@ const LoginModel = ({ onDismiss, onLoginSuccessful }: RegisterModelProps) => {
                             error={errors.userName}
                         />
                         <TextInputField
-                            name="password"
+                            name="passwd"
                             label="Password"
                             type="password"
                             placeholder="Password"
