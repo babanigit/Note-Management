@@ -1,140 +1,82 @@
-import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
-import { NoteModel } from "../../model/noteModel";
-import Note from "../../components/note/Note";
-import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
 
-import * as NotesApi from "../../networks/note_api"
+import { Container } from "react-bootstrap";
 
-import styles from "../../style/notePage.module.css"
-import sytleUtil from "../../style/utils.module.css"
 
-import AddEditNoteDialog from "../../components/noteDialog/AddEditNoteDialog";
+import styles from "../../style/notePage.module.css";
 
-import { FaPlus } from "react-icons/fa"
-import RegisterModel from "../../components/RegisterModel/RegisterModel";
 import LoginModel from "../../components/RegisterModel/LoginModel";
+import RegisterModel from "../../components/RegisterModel/RegisterModel";
+import NavBar from "../../components/navBar/NavBar";
+import { useEffect, useState } from "react";
+import { UserModel } from "../../model/userModel";
+
+import * as NoteApi from "../../networks/note_api"
+import NotesPageLoggedInView from "../../components/note/NotesPageLoggedInView";
+import NotesPageLogoutview from "../../components/note/NotesPageLogoutview";
 
 
 const Home = () => {
 
-  const [notes, setNote] = useState<NoteModel[]>([]);
-  const [showNotesLoading, setShowNotesLoading] = useState(true);
-  const [showNotesLoadingError, setShowNotesLoadingError] = useState(false);
+  const [loggedInUser,setLoggedInUser] = useState<UserModel|null>(null);
 
-  const [showAddNote, setShowAddNote] = useState(false);
-  const [noteToEdit, setNoteToEdit] = useState<NoteModel | null>(null);
+  const[showRegModel,setShowRegModel]= useState(false);
 
-  useEffect(() => {
-    async function loadNotes() {
+  const[showLogModel,setShowLogModel]=useState(false);
+
+  useEffect(()=> {
+    async function fetchLoggedInUser() {
       try {
 
-        // it will return the fetched data
-
-        setShowNotesLoadingError(false);
-        setShowNotesLoading(true)
-
-        const notes = await NotesApi.fetchNotes();
-        setNote(notes);
+        const user= await NoteApi.getLoggedInUser();
+        setLoggedInUser(user)
 
       } catch (error) {
         console.error(error);
-        alert(error);
-        setShowNotesLoadingError(true);
-
-      } finally {
-        setShowNotesLoading(false)
-
       }
     }
+    fetchLoggedInUser();
+  })
 
-    loadNotes();
-  }, []);
-
-  async function deleteNote(note: NoteModel) {
-    try {
-
-      await NotesApi.deleteNote(note._id)
-      setNote(notes.filter(existingNote => existingNote._id !== note._id))
-    } catch (error) {
-      console.error(error);
-      alert(error)
-    }
-  }
-
-  const notesGrid =
-    <Row xs={1} md={2} xl={3}
-      className={`g-4 ${styles.notesGrid} `}
-    >
-      {notes.map((note) => (
-        <Col className=" p-2" key={note._id}>
-          <Note
-            note={note}
-            className={styles.note}
-            onNoteClicked={setNoteToEdit}
-            onDeleteNoteClicked={deleteNote}
-          />
-        </Col>
-      ))}
-    </Row>
+  
 
   return (
     <>
+      <NavBar
+        loggedInUser={loggedInUser}
+        onLoginClicked={() =>setShowLogModel(true)}
+        onLogoutSuccessful={() =>setLoggedInUser(null)}
+        onRegisterClicked={() => setShowRegModel(true)}
+      />
       <Container className={` bg-blue-100 ${styles.notesPage} `}>
 
-        <Button onClick={() => setShowAddNote(true)}
-          className={` bg-blue-400 ${sytleUtil.blockCenter} ${sytleUtil.flexCenter} `} >
-          <FaPlus />
-          Add new notes
-        </Button>
-
-        {showNotesLoading && <Spinner animation="border" variant="primary" />}
-        {showNotesLoadingError && <p> something went wrong please refresh the page.</p>}
-        {!showNotesLoading && !showNotesLoadingError &&
-          <>
-            {
-              notes.length > 0
-                ? notesGrid
-                : <p>you don't have any notes yet</p>
-            }
-          </>
-        }
-
         {
-          showAddNote &&
-          <AddEditNoteDialog
-            onDismiss={() => setShowAddNote(false)}
-            onNoteSaved={(newNote) => {
-              setNote([...notes, newNote])
-              setShowAddNote(false)
-            }}
-          />
-        }
+        loggedInUser 
+        ?<NotesPageLoggedInView />
+      :<NotesPageLogoutview />
+      }
 
-        {noteToEdit &&
-          <AddEditNoteDialog
-            noteToEdit={noteToEdit}
-            onDismiss={() => setNoteToEdit(null)}
-            onNoteSaved={(updatedNote) => {
-              setNote(notes.map(existingNote => existingNote._id === updatedNote._id ? updatedNote : existingNote))
-              setNoteToEdit(null)
-            }}
-          />
-        }
 
-        {true &&
-          <RegisterModel
-            onDismiss={() => { }}
-            onRegistrationSuccessful={() => { }}
-          />}
-
-        {false &&
-          <LoginModel
-            onDismiss={() => { }}
-            onLoginSuccessful={() => { }}
-          />}
+       
 
       </Container>
+
+      {showRegModel &&
+          <RegisterModel
+            onDismiss={() => setShowRegModel(false)}
+            onRegistrationSuccessful={(user) => { 
+              setLoggedInUser(user);
+              setShowRegModel(false);
+            }}
+          />}
+
+        {showLogModel &&
+          <LoginModel
+            onDismiss={() =>setShowLogModel(false)}
+            onLoginSuccessful={(user) => {
+              setLoggedInUser(user);
+              setShowLogModel(false);
+             }}
+          />}
 
       {/* <div className=" h-screen grid place-items-center place-content-center ">
         <div>hello</div>

@@ -28,7 +28,7 @@ const Note = ({ note, onNoteClicked ,className,onDeleteNoteClicked }:NoteProps) 
     if(updatedAt>createdAt) {
         createdUpdatedText="updated: " + FormatDate(updatedAt);
     }else{
-        createdUpdatedText="created: " +FormatDate(createdAt);
+        createdUpdatedText="created: " + FormatDate(createdAt);
     }
 
   return (
