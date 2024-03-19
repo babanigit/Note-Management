@@ -39,8 +39,8 @@ export const getAuthenticatedUser:RequestHandler = async(req,res,next)=> {
 
 const getRegister = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { userName, email, passwd, cPasswd } = await req.body;
-    if (!userName || !email || !passwd || !cPasswd) {
+    const { userName, email, passwd} = await req.body;
+    if (!userName || !email || !passwd ) {
 
       throw createHttpError(400, "parameters missing");
       res.status(422).json({
@@ -71,9 +71,9 @@ const getRegister = async (req: Request, res: Response, next: NextFunction): Pro
 
       else {
 
-        if (passwd !== cPasswd) {
-          throw createHttpError(400, "confirm password is not matching")
-        }
+        // if (passwd !== cPasswd) {
+        //   throw createHttpError(400, "confirm password is not matching")
+        // }
 
         // password hashing
         const hashedPasswd = await bcrypt.hash(passwd, 10);
@@ -82,12 +82,15 @@ const getRegister = async (req: Request, res: Response, next: NextFunction): Pro
           userName,
           email,
           passwd: hashedPasswd,
-          cPasswd: hashedPasswd,
+          // cPasswd: hashedPasswd,
         });
 
         req.session.userId = newUser._id;
 
         res.status(200).json(newUser);
+
+        console.log(newUser)
+
 
         // console.log(`user Created ${email}`);
         // res
@@ -172,6 +175,7 @@ const getLogin: RequestHandler<unknown, unknown, IUser, unknown> = async (req, r
       }
       req.session.userId = user._id;
       res.status(201).json(user)
+      console.log(user)
 
     }
   } catch (error) {

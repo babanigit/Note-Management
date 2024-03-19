@@ -44,8 +44,8 @@ exports.getAuthenticatedUser = getAuthenticatedUser;
 // }
 const getRegister = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { userName, email, passwd, cPasswd } = yield req.body;
-        if (!userName || !email || !passwd || !cPasswd) {
+        const { userName, email, passwd } = yield req.body;
+        if (!userName || !email || !passwd) {
             throw (0, http_errors_1.default)(400, "parameters missing");
             res.status(422).json({
                 error: "pls fill the registration form",
@@ -67,19 +67,20 @@ const getRegister = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                 throw (0, http_errors_1.default)(409, "username is already taken!");
             }
             else {
-                if (passwd !== cPasswd) {
-                    throw (0, http_errors_1.default)(400, "confirm password is not matching");
-                }
+                // if (passwd !== cPasswd) {
+                //   throw createHttpError(400, "confirm password is not matching")
+                // }
                 // password hashing
                 const hashedPasswd = yield bcrypt_1.default.hash(passwd, 10);
                 const newUser = yield userSchema_1.default.create({
                     userName,
                     email,
                     passwd: hashedPasswd,
-                    cPasswd: hashedPasswd,
+                    // cPasswd: hashedPasswd,
                 });
                 req.session.userId = newUser._id;
                 res.status(200).json(newUser);
+                console.log(newUser);
                 // console.log(`user Created ${email}`);
                 // res
                 // // generate token
@@ -143,6 +144,7 @@ const getLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             }
             req.session.userId = user._id;
             res.status(201).json(user);
+            console.log(user);
         }
     }
     catch (error) {

@@ -11,17 +11,19 @@ import sytleUtil from "../../style/utils.module.css"
 
 import AddEditNoteDialog from "../../components/noteDialog/AddEditNoteDialog";
 
-import {FaPlus} from "react-icons/fa"
+import { FaPlus } from "react-icons/fa"
+import RegisterModel from "../../components/RegisterModel/RegisterModel";
+import LoginModel from "../../components/RegisterModel/LoginModel";
 
 
 const Home = () => {
 
   const [notes, setNote] = useState<NoteModel[]>([]);
-  const [showNotesLoading,setShowNotesLoading] = useState(true);
-  const [showNotesLoadingError,setShowNotesLoadingError] = useState(false);
-  
-  const [showAddNote,setShowAddNote]= useState(false);
-  const [noteToEdit,setNoteToEdit] = useState<NoteModel|null>(null);
+  const [showNotesLoading, setShowNotesLoading] = useState(true);
+  const [showNotesLoadingError, setShowNotesLoadingError] = useState(false);
+
+  const [showAddNote, setShowAddNote] = useState(false);
+  const [noteToEdit, setNoteToEdit] = useState<NoteModel | null>(null);
 
   useEffect(() => {
     async function loadNotes() {
@@ -31,8 +33,8 @@ const Home = () => {
 
         setShowNotesLoadingError(false);
         setShowNotesLoading(true)
-      
-        const notes=await NotesApi.fetchNotes();
+
+        const notes = await NotesApi.fetchNotes();
         setNote(notes);
 
       } catch (error) {
@@ -40,7 +42,7 @@ const Home = () => {
         alert(error);
         setShowNotesLoadingError(true);
 
-      }finally{
+      } finally {
         setShowNotesLoading(false)
 
       }
@@ -49,75 +51,89 @@ const Home = () => {
     loadNotes();
   }, []);
 
-  async function deleteNote(note:NoteModel) {
+  async function deleteNote(note: NoteModel) {
     try {
-      
+
       await NotesApi.deleteNote(note._id)
-      setNote(notes.filter(existingNote=> existingNote._id !== note._id))
+      setNote(notes.filter(existingNote => existingNote._id !== note._id))
     } catch (error) {
       console.error(error);
       alert(error)
     }
   }
 
-  const notesGrid =  
-  <Row xs={1} md={2} xl={3} 
-  className={`g-4 ${styles.notesGrid} `}
-  >
-  {notes.map((note) => (
-    <Col className=" p-2" key={note._id}>
-      <Note 
-      note={note} 
-      className={styles.note}
-      onNoteClicked={setNoteToEdit}
-      onDeleteNoteClicked={deleteNote}
-        />
-    </Col>
-  ))}
-</Row>
+  const notesGrid =
+    <Row xs={1} md={2} xl={3}
+      className={`g-4 ${styles.notesGrid} `}
+    >
+      {notes.map((note) => (
+        <Col className=" p-2" key={note._id}>
+          <Note
+            note={note}
+            className={styles.note}
+            onNoteClicked={setNoteToEdit}
+            onDeleteNoteClicked={deleteNote}
+          />
+        </Col>
+      ))}
+    </Row>
 
   return (
     <>
-      <Container className= {` bg-blue-100 ${styles.notesPage} `}>
+      <Container className={` bg-blue-100 ${styles.notesPage} `}>
 
-        <Button onClick={()=> setShowAddNote(true)}
-        className={` bg-blue-400 ${sytleUtil.blockCenter} ${sytleUtil.flexCenter} `} >
+        <Button onClick={() => setShowAddNote(true)}
+          className={` bg-blue-400 ${sytleUtil.blockCenter} ${sytleUtil.flexCenter} `} >
           <FaPlus />
           Add new notes
         </Button>
 
-      {showNotesLoading && <Spinner animation="border" variant="primary" />}
-      {showNotesLoadingError && <p> something went wrong please refresh the page.</p>}
-      {!showNotesLoading && !showNotesLoadingError &&
-      <>
-      {
-        notes.length>0
-        ? notesGrid
-        : <p>you don't have any notes yet</p>
-      }
-      </>
-      }
+        {showNotesLoading && <Spinner animation="border" variant="primary" />}
+        {showNotesLoadingError && <p> something went wrong please refresh the page.</p>}
+        {!showNotesLoading && !showNotesLoadingError &&
+          <>
+            {
+              notes.length > 0
+                ? notesGrid
+                : <p>you don't have any notes yet</p>
+            }
+          </>
+        }
 
         {
           showAddNote &&
           <AddEditNoteDialog
-          onDismiss={()=>setShowAddNote(false)}
-          onNoteSaved={(newNote)=>{
-            setNote([...notes, newNote])
-            setShowAddNote(false)
-          }}
+            onDismiss={() => setShowAddNote(false)}
+            onNoteSaved={(newNote) => {
+              setNote([...notes, newNote])
+              setShowAddNote(false)
+            }}
           />
         }
 
-        {noteToEdit && 
-        <AddEditNoteDialog
-        noteToEdit={noteToEdit}
-        onDismiss={()=> setNoteToEdit(null)}
-        onNoteSaved={(updatedNote)=>{
-          setNote(notes.map(existingNote => existingNote._id === updatedNote._id ? updatedNote : existingNote))
-          setNoteToEdit(null)
-        }}
-        />}
+        {noteToEdit &&
+          <AddEditNoteDialog
+            noteToEdit={noteToEdit}
+            onDismiss={() => setNoteToEdit(null)}
+            onNoteSaved={(updatedNote) => {
+              setNote(notes.map(existingNote => existingNote._id === updatedNote._id ? updatedNote : existingNote))
+              setNoteToEdit(null)
+            }}
+          />
+        }
+
+        {true &&
+          <RegisterModel
+            onDismiss={() => { }}
+            onRegistrationSuccessful={() => { }}
+          />}
+
+        {false &&
+          <LoginModel
+            onDismiss={() => { }}
+            onLoginSuccessful={() => { }}
+          />}
+
       </Container>
 
       {/* <div className=" h-screen grid place-items-center place-content-center ">

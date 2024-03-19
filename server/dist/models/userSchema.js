@@ -18,10 +18,10 @@ const userSchema = new mongoose_1.default.Schema({
         type: String,
         require: true
     },
-    cPasswd: {
-        type: String,
-        require: true
-    },
+    // cPasswd:{
+    //     type:String,
+    //     require:true
+    // },
 }, {
     timestamps: true,
 });

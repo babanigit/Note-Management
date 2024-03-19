@@ -8,7 +8,6 @@ import { FormatDate } from "../../util/FormateData";
 
 import {MdDelete} from "react-icons/md"
 
-
 interface NoteProps{
     note:NoteModel;
     onNoteClicked:(note:NoteModel)=>void;

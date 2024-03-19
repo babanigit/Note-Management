@@ -15,10 +15,10 @@ const userSchema= new mongoose.Schema({
         require:true
     },
 
-    cPasswd:{
-        type:String,
-        require:true
-    },
+    // cPasswd:{
+    //     type:String,
+    //     require:true
+    // },
 
 },{
     timestamps:true,
