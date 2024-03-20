@@ -26,19 +26,23 @@ const LoginModel = ({ onDismiss, onLoginSuccessful }: LoginModelProps) => {
 
     async function onSubmit(credentials:LoginCred) {
         try {
+            
             const newUser = await NoteApi.getLoginUser(credentials);
-            onLoginSuccessful(newUser!);
+                        console.log(newUser);
+
+            onLoginSuccessful(newUser);
+
         } catch (error) {
 
-            if (error instanceof UnauthorizedError) {
-                setErrorText(error.message);
-            } else {
-                alert(error);
-            }
-            console.error(error);
+            // if (error instanceof UnauthorizedError) {
+            //     setErrorText(error.message);
+            // } else {
+            //     alert(error);
+            // }
+            // console.error(error);
 
-            // alert(error)
-            // console.log(error);
+            alert(error)
+            console.log(error);
         }
     }
 
@@ -69,9 +73,9 @@ const LoginModel = ({ onDismiss, onLoginSuccessful }: LoginModelProps) => {
                         />
                         <TextInputField
                             name="passwd"
-                            label="Password"
-                            type="password"
-                            placeholder="Password"
+                            label="Passwd"
+                            type="passwd"
+                            placeholder="Passwd"
                             register={register}
                             registerOptions={{ required: "Required" }}
                             error={errors.passwd}

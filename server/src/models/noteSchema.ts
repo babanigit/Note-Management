@@ -1,7 +1,11 @@
-import mongoose, { InferSchemaType } from "mongoose";
+import mongoose, { InferSchemaType, Schema } from "mongoose";
 // import jwt from "jsonwebtoken";
 
 const noteSchema= new mongoose.Schema({
+    userId:{
+        type:Schema.Types.ObjectId,
+        require:true
+    },
     title:{
         type:String,
         require:true

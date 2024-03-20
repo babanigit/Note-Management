@@ -6,16 +6,19 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { error } from "console";
 import createHttpError from "http-errors";
+import { assertIsDefine } from "../util/assertIsDefine";
 
 export const getAuthenticatedUser:RequestHandler = async(req,res,next)=> {
 
-  const getAuthenticated = req.session.userId;
+  const getAuthenticatedUserId = req.session.userId;
 
-  try {
-    if(!getAuthenticated) {
-      throw createHttpError(401,"user not authenticated")
-    }
-    const user=await User.findById(getAuthenticated).select("+email").exec();
+  try {    
+
+    assertIsDefine(getAuthenticatedUserId);
+
+    const user=await User.findById(req.session.userId).select("+email").exec();
+
+    console.log(user)
     res.status(200).json(user)
 
   } catch (error) {
@@ -87,9 +90,11 @@ const getRegister = async (req: Request, res: Response, next: NextFunction): Pro
 
         req.session.userId = newUser._id;
 
-        res.status(200).json(newUser);
 
         console.log(newUser)
+        res.status(200).json(newUser);
+
+       
 
 
         // console.log(`user Created ${email}`);
@@ -174,8 +179,11 @@ const getLogin: RequestHandler<unknown, unknown, IUser, unknown> = async (req, r
         throw createHttpError(401, "invalid credentials")
       }
       req.session.userId = user._id;
-      res.status(201).json(user)
+
       console.log(user)
+      res.status(201).json(user)
+
+    
 
     }
   } catch (error) {

@@ -42,6 +42,9 @@ export async function getRegisterUser(Credential:RegisterCred):Promise<UserModel
         },
         body: JSON.stringify(Credential),
     });
+
+    console.log("from the getregster")
+
     return res.json();
 }
 
@@ -60,6 +63,8 @@ export async function getLoginUser(Credential:LoginCred):Promise<UserModel>{
         },
         body: JSON.stringify(Credential),
     });
+
+    console.log("from the getloginuser")
     return res.json();
 }
 

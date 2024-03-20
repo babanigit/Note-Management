@@ -37,15 +37,14 @@ const Home = () => {
     fetchLoggedInUser();
   })
 
-  
 
   return (
     <>
       <NavBar
         loggedInUser={loggedInUser}
         onLoginClicked={() =>setShowLogModel(true)}
-        onLogoutSuccessful={() =>setLoggedInUser(null)}
         onRegisterClicked={() => setShowRegModel(true)}
+        onLogoutSuccessful={() =>setLoggedInUser(null)}
       />
       <Container className={` bg-blue-100 ${styles.notesPage} `}>
 

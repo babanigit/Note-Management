@@ -17,13 +17,13 @@ exports.getData2 = exports.getData = exports.getLogin = exports.getRegister = ex
 const userSchema_1 = __importDefault(require("../models/userSchema"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const http_errors_1 = __importDefault(require("http-errors"));
+const assertIsDefine_1 = require("../util/assertIsDefine");
 const getAuthenticatedUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const getAuthenticated = req.session.userId;
+    const getAuthenticatedUserId = req.session.userId;
     try {
-        if (!getAuthenticated) {
-            throw (0, http_errors_1.default)(401, "user not authenticated");
-        }
-        const user = yield userSchema_1.default.findById(getAuthenticated).select("+email").exec();
+        (0, assertIsDefine_1.assertIsDefine)(getAuthenticatedUserId);
+        const user = yield userSchema_1.default.findById(req.session.userId).select("+email").exec();
+        console.log(user);
         res.status(200).json(user);
     }
     catch (error) {
@@ -79,8 +79,8 @@ const getRegister = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                     // cPasswd: hashedPasswd,
                 });
                 req.session.userId = newUser._id;
-                res.status(200).json(newUser);
                 console.log(newUser);
+                res.status(200).json(newUser);
                 // console.log(`user Created ${email}`);
                 // res
                 // // generate token
@@ -143,8 +143,8 @@ const getLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
                 throw (0, http_errors_1.default)(401, "invalid credentials");
             }
             req.session.userId = user._id;
-            res.status(201).json(user);
             console.log(user);
+            res.status(201).json(user);
         }
     }
     catch (error) {

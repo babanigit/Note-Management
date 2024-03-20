@@ -19,6 +19,7 @@ interface RegisterModelProps {
     onRegistrationSuccessful: (user: UserModel) => void;
 }
 
+// main fun
 const RegisterModel = ({
     onDismiss,
     onRegistrationSuccessful,

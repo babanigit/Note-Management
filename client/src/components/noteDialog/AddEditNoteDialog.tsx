@@ -29,6 +29,7 @@ const AddEditNoteDialog = ({
   });
 
   async function onSubmit(input: NoteInput) {
+    
     try {
       let noteResponse: NoteModel;
 
