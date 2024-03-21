@@ -10,6 +10,7 @@ import userRouter from "./Routes/userRoutes";
 import createHttpError,{isHttpError} from "http-errors";
 import session from "express-session";
 import MongoStore = require("connect-mongo");
+import { requiresAuth } from "./middleware/auth";
 
 dotenv.config({ path: "./.env" });
 const port = process.env.PORT;
@@ -38,7 +39,7 @@ app.use(session({
 
 // routes
 app.use("/api/notes", noteRoutes);
-app.use("/api/users", userRouter)
+app.use("/api/users",  userRouter)
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
   try {

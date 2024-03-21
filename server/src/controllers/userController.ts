@@ -10,11 +10,11 @@ import { assertIsDefine } from "../util/assertIsDefine";
 
 export const getAuthenticatedUser:RequestHandler = async(req,res,next)=> {
 
-  const getAuthenticatedUserId = req.session.userId;
+  // const getAuthenticatedUserId = req.session.userId;
 
   try {    
 
-    assertIsDefine(getAuthenticatedUserId);
+    // assertIsDefine(getAuthenticatedUserId);
 
     const user=await User.findById(req.session.userId).select("+email").exec();
 

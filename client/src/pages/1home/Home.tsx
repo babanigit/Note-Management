@@ -23,6 +23,8 @@ const Home = () => {
 
   const[showLogModel,setShowLogModel]=useState(false);
 
+
+  // here we are fetching logged in user 
   useEffect(()=> {
     async function fetchLoggedInUser() {
       try {
@@ -47,6 +49,9 @@ const Home = () => {
         onLogoutSuccessful={() =>setLoggedInUser(null)}
       />
       <Container className={` bg-blue-100 ${styles.notesPage} `}>
+
+
+{/* if the logged in user is there then true else false */}
 
         {
         loggedInUser 

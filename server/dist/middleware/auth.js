@@ -10,6 +10,7 @@ const requiresAuth = (req, res, next) => {
         next();
     }
     else {
+        console.log("error from auth");
         next((0, http_errors_1.default)(401, "user is not authenticated from the auth"));
     }
 };

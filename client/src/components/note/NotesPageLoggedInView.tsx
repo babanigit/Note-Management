@@ -30,8 +30,6 @@ const NotesPageLoggedInView = () => {
         async function loadNotes() {
           try {
     
-            // it will return the fetched data
-    
             setShowNotesLoadingError(false);
             setShowNotesLoading(true)
     
@@ -52,6 +50,8 @@ const NotesPageLoggedInView = () => {
         loadNotes();
       }, []);
     
+
+      // to delete note
       async function deleteNote(note: NoteModel) {
         try {
     
@@ -63,6 +63,9 @@ const NotesPageLoggedInView = () => {
         }
       }
     
+
+      // noteGrids
+      // here will map the note
       const notesGrid =
         <Row xs={1} md={2} xl={3}
           className={`g-4 ${styles.notesGrid} `}
@@ -90,7 +93,12 @@ const NotesPageLoggedInView = () => {
 
             {showNotesLoading && <Spinner animation="border" variant="primary" />}
             {showNotesLoadingError && <p> something went wrong please refresh the page.</p>}
-            {!showNotesLoading && !showNotesLoadingError &&
+
+
+
+{/* here will show all the notes through the map */}
+            {!showNotesLoading && 
+            !showNotesLoadingError &&
                 <>
                     {
                         notes.length > 0
@@ -100,6 +108,8 @@ const NotesPageLoggedInView = () => {
                 </>
             }
 
+
+{/* to add note  */}
             {
                 showAddNote &&
                 <AddEditNoteDialog
@@ -111,6 +121,8 @@ const NotesPageLoggedInView = () => {
                 />
             }
 
+
+{/* to edit note */}
             {noteToEdit &&
                 <AddEditNoteDialog
                     noteToEdit={noteToEdit}

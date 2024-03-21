@@ -17,11 +17,10 @@ exports.getData2 = exports.getData = exports.getLogin = exports.getRegister = ex
 const userSchema_1 = __importDefault(require("../models/userSchema"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const http_errors_1 = __importDefault(require("http-errors"));
-const assertIsDefine_1 = require("../util/assertIsDefine");
 const getAuthenticatedUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const getAuthenticatedUserId = req.session.userId;
+    // const getAuthenticatedUserId = req.session.userId;
     try {
-        (0, assertIsDefine_1.assertIsDefine)(getAuthenticatedUserId);
+        // assertIsDefine(getAuthenticatedUserId);
         const user = yield userSchema_1.default.findById(req.session.userId).select("+email").exec();
         console.log(user);
         res.status(200).json(user);
