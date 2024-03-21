@@ -61,7 +61,8 @@ app.use("/api/users", userRoutes_1.default);
 app.get("/", (req, res, next) => {
     try {
         res.status(200).json({
-            message: "Express.js + Typescript server is live ",
+            message: "note-management api is live ",
+            creator: "Aniket panchal (me)"
         });
     }
     catch (error) {
