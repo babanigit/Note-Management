@@ -4,8 +4,8 @@ import { UserModel } from "../aModal/userModal";
 // will update this links
 
 // http://localhost:4000
-const noteLink = "/api/notes/";
-const userLink = "/api/users/";
+const noteLink = "https://note-management-api-yz85.onrender.com/api/notes/";
+const userLink = "https://note-management-api-yz85.onrender.com/api/users/";
 
 
 // we used this to handle the errors while fetching the data from api
