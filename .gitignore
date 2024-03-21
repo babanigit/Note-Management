@@ -1,6 +1,7 @@
 
-/server/node_modules/
-/server/.env
+/backend/node_modules/
+/backend/.env
+
 
 /server2/node_modules/
 /server2/.env
@@ -11,9 +12,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/client/node_modules
-/client/.pnp
-/client.pnp.js
+/frontend
+/frontend/node_modules
+/frontend/.pnp
+/frontend.pnp.js
 
 # testing
 /client/coverage
