@@ -16,14 +16,16 @@ exports.deleteNote = exports.updateNote = exports.createNotes = exports.getNote 
 const noteSchema_1 = __importDefault(require("../models/noteSchema"));
 const http_errors_1 = __importDefault(require("http-errors"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const assertIsDefine_1 = require("../util/assertIsDefine");
+const assertIsDefine_1 = require("../utils/assertIsDefine");
 const getNotes = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const getAuthenticatedUserId = req.session.userId;
     try {
         // throw createHttpError(401);
-        (0, assertIsDefine_1.assertIsDefine)(getAuthenticatedUserId);
+        // assertIsDefine(getAuthenticatedUserId)
         const notes = yield noteSchema_1.default.find({ userId: getAuthenticatedUserId }).exec();
         res.status(200).json(notes);
+        console.log("getAuth from noteController");
+        console.log("session is ", req.session.userId, notes);
     }
     catch (error) {
         next(error);
@@ -58,7 +60,7 @@ const createNotes = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         if (!title)
             throw (0, http_errors_1.default)(400, "note must have a title");
         const newNotes = yield noteSchema_1.default.create({
-            userId: getAuthenticatedUserId,
+            userId: getAuthenticatedUserId, //here we stored new property "userId" which has req.session.userId
             title,
             text,
         });

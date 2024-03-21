@@ -1,15 +1,16 @@
-import { useForm } from "react-hook-form";
-import { UserModel } from "../../model/userModel";
-import { LoginCred } from "../../networks/note_api";
 
-import * as NoteApi from "../../networks/note_api"
+import { useForm } from "react-hook-form";
+import { UserModel } from "../aModal/userModal";
+import { LoginCred } from "../aNetwork/note_api";
+
+import * as NoteApi from "../aNetwork/note_api"
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import TextInputField from "../form/TextInputField";
 import { useState } from "react";
 
 import styleUtils from "../../style/utils.module.css"
 
-import { UnauthorizedError } from "../errors/http-errors";
+// import { UnauthorizedError } from "../errors/http-errors";
 
 
 
@@ -18,7 +19,7 @@ interface LoginModelProps {
     onLoginSuccessful: (user: UserModel) => void;
 }
 
-const LoginModel = ({ onDismiss, onLoginSuccessful }: LoginModelProps) => {
+const LogModal = ({ onDismiss, onLoginSuccessful }: LoginModelProps) => {
 
     const [errorText, setErrorText] = useState<string | null>(null);
 
@@ -28,7 +29,10 @@ const LoginModel = ({ onDismiss, onLoginSuccessful }: LoginModelProps) => {
         try {
             
             const newUser = await NoteApi.getLoginUser(credentials);
-                        console.log(newUser);
+
+
+            console.log("hey bitch from logmodel from getLoginUser")
+            console.log(newUser);
 
             onLoginSuccessful(newUser);
 
@@ -56,11 +60,13 @@ const LoginModel = ({ onDismiss, onLoginSuccessful }: LoginModelProps) => {
                 </Modal.Header>
 
                 <Modal.Body>
+
                     {errorText &&
                         <Alert variant="danger">
                             {errorText}
                         </Alert>
                     }
+
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <TextInputField
                             name="userName"
@@ -73,9 +79,9 @@ const LoginModel = ({ onDismiss, onLoginSuccessful }: LoginModelProps) => {
                         />
                         <TextInputField
                             name="passwd"
-                            label="Passwd"
-                            type="passwd"
-                            placeholder="Passwd"
+                            label="Password"
+                            type="password"
+                            placeholder="Password"
                             register={register}
                             registerOptions={{ required: "Required" }}
                             error={errors.passwd}
@@ -94,5 +100,5 @@ const LoginModel = ({ onDismiss, onLoginSuccessful }: LoginModelProps) => {
     )
 }
 
-export default LoginModel
+export default LogModal
 

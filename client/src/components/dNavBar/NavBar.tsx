@@ -1,5 +1,5 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { UserModel } from "../../model/userModel"
+import { UserModel } from "../aModal/userModal"
 import NavBarLoggedInView from "./NavBarLoggedInView";
 import NavBarLoggedOutView from "./NavBarLoggedOutView";
 

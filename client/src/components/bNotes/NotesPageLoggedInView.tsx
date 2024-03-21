@@ -1,3 +1,5 @@
+// main
+
 import { Button, Col, Row, Spinner } from "react-bootstrap";
 import sytleUtil from "../../style/utils.module.css";
 
@@ -5,9 +7,9 @@ import { FaPlus } from "react-icons/fa";
 import AddEditNoteDialog from "../../components/noteDialog/AddEditNoteDialog";
 
 import { useEffect, useState } from "react";
-import { NoteModel } from "../../model/noteModel";
+import { NoteModel } from "../aModal/noteModal";
 
-import * as NotesApi from "../../networks/note_api";
+import * as NotesApi from "../aNetwork/note_api";
 
 
 import styles from "../../style/notePage.module.css";
@@ -18,23 +20,30 @@ import Note from "./Note";
 
 const NotesPageLoggedInView = () => {
 
-    const [notes, setNote] = useState<NoteModel[]>([]);
+  // will get all the data
+    const [notes, setNotes] = useState<NoteModel[]>([]);
+
     const [showNotesLoading, setShowNotesLoading] = useState(true);
     const [showNotesLoadingError, setShowNotesLoadingError] = useState(false);
-  
+
     const [showAddNote, setShowAddNote] = useState(false);
     const [noteToEdit, setNoteToEdit] = useState<NoteModel | null>(null);
 
 
     useEffect(() => {
+
+      // here will load the notes
         async function loadNotes() {
+
           try {
     
             setShowNotesLoadingError(false);
             setShowNotesLoading(true)
     
             const notes = await NotesApi.fetchNotes();
-            setNote(notes);
+
+            console.log(notes)
+            setNotes(notes);
     
           } catch (error) {
             console.error(error);
@@ -43,8 +52,8 @@ const NotesPageLoggedInView = () => {
     
           } finally {
             setShowNotesLoading(false)
-    
           }
+
         }
     
         loadNotes();
@@ -54,9 +63,11 @@ const NotesPageLoggedInView = () => {
       // to delete note
       async function deleteNote(note: NoteModel) {
         try {
-    
           await NotesApi.deleteNote(note._id)
-          setNote(notes.filter(existingNote => existingNote._id !== note._id))
+
+          // setNotes
+          setNotes(notes.filter(existingNote => existingNote._id !== note._id))
+
         } catch (error) {
           console.error(error);
           alert(error)
@@ -70,6 +81,7 @@ const NotesPageLoggedInView = () => {
         <Row xs={1} md={2} xl={3}
           className={`g-4 ${styles.notesGrid} `}
         >
+
           {notes.map((note) => (
             <Col className=" p-2" key={note._id}>
               <Note
@@ -80,6 +92,7 @@ const NotesPageLoggedInView = () => {
               />
             </Col>
           ))}
+
         </Row>
 
     return (
@@ -110,12 +123,13 @@ const NotesPageLoggedInView = () => {
 
 
 {/* to add note  */}
+{/* addNote */}
             {
                 showAddNote &&
                 <AddEditNoteDialog
                     onDismiss={() => setShowAddNote(false)}
                     onNoteSaved={(newNote) => {
-                        setNote([...notes, newNote])
+                        setNotes([...notes, newNote])
                         setShowAddNote(false)
                     }}
                 />
@@ -123,12 +137,13 @@ const NotesPageLoggedInView = () => {
 
 
 {/* to edit note */}
+{/* editNote */}
             {noteToEdit &&
                 <AddEditNoteDialog
                     noteToEdit={noteToEdit}
                     onDismiss={() => setNoteToEdit(null)}
                     onNoteSaved={(updatedNote) => {
-                        setNote(notes.map(existingNote => existingNote._id === updatedNote._id ? updatedNote : existingNote))
+                        setNotes(notes.map((existingNote) => existingNote._id === updatedNote._id ? updatedNote : existingNote))
                         setNoteToEdit(null)
                     }}
                 />

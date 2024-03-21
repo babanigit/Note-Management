@@ -7,7 +7,7 @@ interface TextInputFieldProps {
   register: UseFormRegister<any>;
   registerOptions?: RegisterOptions;
   error?: FieldError;
-  [x: string]: any;
+  [x: string]: any; //this is used, so we can get other type property which has not declared here
 }
 
 const TextInputField = ({
@@ -16,7 +16,7 @@ const TextInputField = ({
   register,
   registerOptions,
   error,
-  ...props
+  ...props  // "...props" means its include all the properties
 }: TextInputFieldProps) => {
   return (
     <Form.Group className="mb-3" controlId={name + "-input"}>

@@ -1,18 +1,17 @@
-import { useForm } from "react-hook-form";
-import { UserModel } from "../../model/userModel";
-import { RegisterCred } from "../../networks/note_api";
 
-import * as NoteApi from "../../networks/note_api";
+import { useForm } from "react-hook-form";
+import { UserModel } from "../aModal/userModal";
+
+import { RegisterCred } from "../aNetwork/note_api"
+import * as NoteApi from "../aNetwork/note_api";
+
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import TextInputField from "../form/TextInputField";
 import { useState } from "react";
 
 import styleUtils from "../../style/utils.module.css";
 
-import { ConflictError } from "../errors/http-errors";
-
-
-// import {conflictError} from "../"
+// import { ConflictError } from "../errors/http-errors";
 
 interface RegisterModelProps {
     onDismiss: () => void;
@@ -20,34 +19,39 @@ interface RegisterModelProps {
 }
 
 // main fun
-const RegisterModel = ({
+const RegModal = ({
     onDismiss,
     onRegistrationSuccessful,
 }: RegisterModelProps) => {
 
     const [errorText, setErrorText] = useState<string | null>(null);
 
+    // REact Form
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
     } = useForm<RegisterCred>();
 
+
+    // fetch the Registration
     async function onSubmit(credentials: RegisterCred) {
         try {
+
             const newUser = await NoteApi.getRegisterUser(credentials);
             console.log(newUser);
             onRegistrationSuccessful(newUser);
-        } catch (error) {
-            if (error instanceof ConflictError) {
-                setErrorText(error.message);
-            } else {
-                alert(error);
-            }
-            console.error(error);
 
-            // alert(error);
-            // console.log(error);
+        } catch (error) {
+            // if (error instanceof ConflictError) {
+            //     setErrorText(error.message);
+            // } else {
+            //     alert(error);
+            // }
+            // console.error(error);
+
+            alert(error);
+            console.log(error);
         }
     }
 
@@ -65,31 +69,35 @@ const RegisterModel = ({
                     </Alert>
                 }
                     <Form onSubmit={handleSubmit(onSubmit)}>
+
                         <TextInputField
                             name="userName"
-                            label="userName"
+
+                            label="Username"
                             type="text"
-                            placeholder="userName"
+                            placeholder="Username"
                             register={register}
-                            registerOptions={{ required: "Required" }}
+                            registerOptions={{ required: "Required Username" }}
                             error={errors.userName}
                         />
                         <TextInputField
                             name="email"
+
                             label="Email"
                             type="email"
                             placeholder="Email"
                             register={register}
-                            registerOptions={{ required: "Required" }}
+                            registerOptions={{ required: "Required Email" }}
                             error={errors.email}
                         />
                         <TextInputField
                             name="passwd"
-                            label="Passwd"
-                            type="passwd"
-                            placeholder="Passwd"
+
+                            label="Password"
+                            type="text"
+                            placeholder="Password"
                             register={register}
-                            registerOptions={{ required: "Required" }}
+                            registerOptions={{ required: "Required Password" }}
                             error={errors.passwd}
                         />
                         {/* <TextInputField
@@ -103,11 +111,12 @@ const RegisterModel = ({
                         /> */}
                         <Button
                             type="submit"
-                            disabled={isSubmitting}
+                            disabled={isSubmitting} // so u cant submit it twice
                             className={styleUtils.width100}
                         >
                             Log In
                         </Button>
+
                     </Form>
                 </Modal.Body>
             </Modal>
@@ -115,4 +124,4 @@ const RegisterModel = ({
     );
 };
 
-export default RegisterModel;
+export default RegModal;

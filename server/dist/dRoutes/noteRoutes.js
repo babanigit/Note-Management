@@ -22,30 +22,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importStar(require("mongoose"));
-const noteSchema = new mongoose_1.default.Schema({
-    userId: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        require: true
-    },
-    title: {
-        type: String,
-        require: true
-    },
-    text: {
-        type: String,
-    },
-    // passwd:{
-    //     type:String,
-    //     require:true
-    // },
-    // cPasswd:{
-    //     type:String,
-    //     require:true
-    // },
-}, {
-    timestamps: true,
-});
-const User = mongoose_1.default.model("notesData", noteSchema);
-exports.default = User;
+const express_1 = __importDefault(require("express"));
+const NotesController = __importStar(require("../controllers/noteController"));
+const router = express_1.default.Router();
+router.route("/").get(NotesController.getNotes).post(NotesController.createNotes);
+router.route("/:noteId").get(NotesController.getNote).patch(NotesController.updateNote).delete(NotesController.deleteNote);
+exports.default = router;

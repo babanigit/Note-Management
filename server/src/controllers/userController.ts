@@ -1,28 +1,44 @@
 // all the functionality will come here
 
-import express, { Response, Express, Request, response, NextFunction, RequestHandler } from "express";
+import express, { Response, Request, response, NextFunction, RequestHandler } from "express";
+import { Document } from "mongoose";
 import User from "../models/userSchema";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { error } from "console";
 import createHttpError from "http-errors";
-import { assertIsDefine } from "../util/assertIsDefine";
+import { assertIsDefine } from "../utils/assertIsDefine";
 
-export const getAuthenticatedUser:RequestHandler = async(req,res,next)=> {
 
-  // const getAuthenticatedUserId = req.session.userId;
 
-  try {    
+export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
+
+  const getAuthenticatedUserId = req.session.userId;
+
+  try {
 
     // assertIsDefine(getAuthenticatedUserId);
 
-    const user=await User.findById(req.session.userId).select("+email").exec();
+    // if (!getAuthenticatedUserId) {
+    //   throw createHttpError(401, "user is not authenticated -b");
+    // }
 
-    console.log(user)
-    res.status(200).json(user)
+    // // because of session.userId will get the data of user which was stored in cookie because of login and reg
+    // const user = await User.findById(
+    //   req.session.userId
+    // ).select("+email").exec();
+
+
+    const user = await User.findById(req.session.userId).select("+email").exec();
+
+    console.log("session is " , req.session.userId)
+
+    console.log("getAuth from userController " , user)
+
+    res.status(200).json(user);
 
   } catch (error) {
     next(error)
+    console.log("error from contoller/getAuth")
     console.error(error)
   }
 }
@@ -40,16 +56,22 @@ export const getAuthenticatedUser:RequestHandler = async(req,res,next)=> {
 // }
 
 
+
+// Define your user interface if needed
+interface User extends Document {
+  _id: string;
+  userName: string;
+  email: string;
+  passwd: string;
+}
+
+
 const getRegister = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { userName, email, passwd} = await req.body;
-    if (!userName || !email || !passwd ) {
+    const { userName, email, passwd } = await req.body;
+    if (!userName || !email || !passwd) {
 
       throw createHttpError(400, "parameters missing");
-      res.status(422).json({
-        error: "pls fill the registration form",
-        process: 0,
-      });
 
     }
 
@@ -60,10 +82,7 @@ const getRegister = async (req: Request, res: Response, next: NextFunction): Pro
       if (existingUserEmail) {
 
         throw createHttpError(409, "email is already taken!")
-        res.status(400).json({
-          message: `user ${email} is already registered`,
-          process: 1,
-        });
+
       }
 
       const existingUserUserName = await User.findOne({ userName: userName });
@@ -74,62 +93,24 @@ const getRegister = async (req: Request, res: Response, next: NextFunction): Pro
 
       else {
 
-        // if (passwd !== cPasswd) {
-        //   throw createHttpError(400, "confirm password is not matching")
-        // }
-
         // password hashing
         const hashedPasswd = await bcrypt.hash(passwd, 10);
 
-        const newUser = await User.create({
+        const user = await User.create({
           userName,
           email,
           passwd: hashedPasswd,
           // cPasswd: hashedPasswd,
         });
 
-        req.session.userId = newUser._id;
 
+        // we sending user._id to the session.userId
+        req.session.userId = user._id;
 
-        console.log(newUser)
-        res.status(200).json(newUser);
+        console.log("session is ", req.session.userId)
 
-       
-
-
-        // console.log(`user Created ${email}`);
-        // res
-
-
-        // // generate token
-        // const accessToken = jwt.sign(
-        //   {
-        //     user: {
-        //       userName: newUser.username,
-        //       email: newUser.email,
-        //       userId: newUser._id.toString(),
-        //     },
-        //   },
-        //   process.env.ACCESS_TOKEN_SECRET!,
-        //   { expiresIn: "20d" }
-        // );
-
-        // if (newUser) {
-        //   res.status(200).json({
-        //     message: `registration successful ${userName}`,
-        //     user: newUser,
-        //     token: accessToken,
-        //     process: 1,
-        //   });
-        // } else {
-        //   res.status(400).json({
-        //     message: "user data invalid",
-        //     process: 0,
-        //   });
-        // }
-
-        // console.log("register successful");
-
+        console.log("getReg from userController", user)
+        res.status(200).json(user);
       }
     }
 
@@ -145,22 +126,24 @@ interface IUser {
 }
 
 
-const getLogin: RequestHandler<unknown, unknown, IUser, unknown> = async (req, res, next) => {
+const getLogin = async (req:Request, res:Response, next:NextFunction) => {
 
-  // const { userName, passwd } = await req.body;
 
-  const userName = req.body.userName;
-  const passwd = req.body.passwd;
+  // const userName = req.body.userName;
+  // const passwd = req.body.passwd;
 
+  const { userName, passwd } = await req.body;
+
+
+
+  // throw createHttpError(404,"random errrorjorrro")
+  console.log("getLogin from userController ",userName,passwd)
 
   try {
     if (!userName || !passwd) {
 
       throw createHttpError(400, "Parameters missing")
-      res.status(400).json({
-        message: "all field required",
-        process: 0,
-      });
+
 
     } else {
       const user = await User.findOne({ userName: userName }).select("+passwd +email").exec();
@@ -173,17 +156,27 @@ const getLogin: RequestHandler<unknown, unknown, IUser, unknown> = async (req, r
         throw new Error("Password or user password is not a string");
       }
 
-      const passwdMatch = bcrypt.compare(passwd, user.passwd);
+      console.log("user.pass",passwd,user.passwd)
+
+      const passwdMatch = await bcrypt.compare(passwd, user.passwd);
 
       if (!passwdMatch) {
         throw createHttpError(401, "invalid credentials")
       }
+
+
+      // we sending user._id to the session.userId
       req.session.userId = user._id;
 
-      console.log(user)
-      res.status(201).json(user)
 
-    
+
+      console.log("session is " , req.session.userId)
+
+      console.log("getLog from userController  " , user)
+
+      res.status(200).json(user);
+
+
 
     }
   } catch (error) {
@@ -194,29 +187,21 @@ const getLogin: RequestHandler<unknown, unknown, IUser, unknown> = async (req, r
 };
 
 // logout
-export const getLogout:RequestHandler= (req,res,next)=> {
-  req.session.destroy(error=>{
+export const getLogout: RequestHandler = (req, res, next) => {
+
+  // will destroy the session here....
+  req.session.destroy(error => {
     if (error) {
       next(error)
-    }else {
+    } else {
       res.sendStatus(200);
     }
   })
 }
 
 
-const getData = (req: Request, res: Response) => {
-  res.status(200).json({ message: "get all contacts " });
-};
-
-const getData2 = (req: Request, res: Response) => {
-  const { userName, phone } = req.body;
-  res.status(200).json({ message: `get all contacts ${userName} and ${phone} ` });
-};
-
 export {
   getRegister,
   getLogin,
-  getData,
-  getData2,
+
 };

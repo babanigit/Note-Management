@@ -2,7 +2,7 @@ import styles from "../../style/note.module.css"
 import styleUtils from "../../style/utils.module.css"
 
 import React from 'react'
-import { NoteModel } from '../../model/noteModel'
+import { NoteModel } from '../aModal/noteModal'
 import { Card } from 'react-bootstrap';
 import { FormatDate } from "../../util/FormateData";
 

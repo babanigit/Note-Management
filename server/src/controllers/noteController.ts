@@ -3,7 +3,7 @@ import express,{ Express,NextFunction,Request,RequestHandler,Response } from "ex
 import NoteModel from "../models/noteSchema"
 import createHttpError from "http-errors";
 import mongoose from "mongoose";
-import { assertIsDefine } from "../util/assertIsDefine";
+import { assertIsDefine } from "../utils/assertIsDefine";
 
 interface CreateNoteBody{
   title?:string;
@@ -17,10 +17,18 @@ export const getNotes =  async(req: Request, res: Response, next:NextFunction) =
     try {
       // throw createHttpError(401);
 
-      assertIsDefine(getAuthenticatedUserId)
+      // assertIsDefine(getAuthenticatedUserId)
 
-        const notes= await NoteModel.find({userId: getAuthenticatedUserId}).exec();
+        const notes= await NoteModel.find(
+          {userId: getAuthenticatedUserId}
+          ).exec();
         res.status(200).json(notes);
+
+
+        console.log("getAuth from noteController")
+        console.log("session is " , req.session.userId , notes)
+
+
     } catch (error) {
         next(error)
     }
@@ -64,7 +72,7 @@ export const getNotes =  async(req: Request, res: Response, next:NextFunction) =
 
       if(!title) throw createHttpError(400,"note must have a title")
       const newNotes=await NoteModel.create({
-    userId:getAuthenticatedUserId,
+    userId:getAuthenticatedUserId, //here we stored new property "userId" which has req.session.userId
         title,
         text,
       })

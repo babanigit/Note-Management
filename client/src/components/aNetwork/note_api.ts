@@ -1,8 +1,11 @@
-import { NoteModel } from "../model/noteModel";
-import { UserModel } from "../model/userModel";
+import { NoteModel } from "../aModal/noteModal";
+import { UserModel } from "../aModal/userModal";
 
-const noteLink = "http://localhost:5002/api/notes/";
-const userLink = "http://localhost:5002/api/users/";
+// will update this links
+
+// http://localhost:4000
+const noteLink = "/api/notes/";
+const userLink = "/api/users/";
 
 
 // we used this to handle the errors while fetching the data from api
@@ -19,10 +22,13 @@ async function fetchData(input: RequestInfo, init?: RequestInit) {
 }
 
 
-// get logged in user details
+// get loggedIn user details
 export async function getLoggedInUser():Promise<UserModel>{
 
     const res= await fetchData(userLink,{method:"GET"});
+
+    console.log("getLoggedInUser from note_api");
+    
     return res.json();
 }
 
@@ -43,7 +49,7 @@ export async function getRegisterUser(Credential:RegisterCred):Promise<UserModel
         body: JSON.stringify(Credential),
     });
 
-    console.log("from the getregster")
+    console.log("getReg from note_api")
 
     return res.json();
 }
@@ -53,7 +59,6 @@ export interface LoginCred {
     userName:string;
     passwd:string;
 }
-
 export async function getLoginUser(Credential:LoginCred):Promise<UserModel>{
 
     const res= await fetchData(userLink+"login",{
@@ -64,7 +69,7 @@ export async function getLoginUser(Credential:LoginCred):Promise<UserModel>{
         body: JSON.stringify(Credential),
     });
 
-    console.log("from the getloginuser")
+    console.log("getLoginUser from note_api")
     return res.json();
 }
 
@@ -76,6 +81,7 @@ export async function getLogout(){
 
 
 
+// NOTES SECTION
 
 // fetch notes
 export async function fetchNotes(): Promise<NoteModel[]> {

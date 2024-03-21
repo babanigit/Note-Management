@@ -1,9 +1,9 @@
 import { Modal, Form, ModalFooter, Button } from "react-bootstrap";
-import { NoteModel } from "../../model/noteModel";
+import { NoteModel } from "../aModal/noteModal"
 import { useForm } from "react-hook-form";
-import { NoteInput } from "../../networks/note_api";
+import { NoteInput } from "../aNetwork/note_api"
 
-import * as noteApi from "../../networks/note_api";
+import * as noteApi from "../aNetwork/note_api";
 import TextInputField from "../form/TextInputField";
 
 interface AddEditNoteProps {
@@ -17,6 +17,8 @@ const AddEditNoteDialog = ({
   onDismiss,
   onNoteSaved,
 }: AddEditNoteProps) => {
+
+
   const {
     register,
     handleSubmit,
@@ -33,6 +35,8 @@ const AddEditNoteDialog = ({
     try {
       let noteResponse: NoteModel;
 
+
+      // fetching add or edit notes
       if (noteToEdit) {
         noteResponse = await noteApi.updateNote(noteToEdit._id, input);
       } else {
@@ -56,51 +60,28 @@ const AddEditNoteDialog = ({
 
         <Modal.Body>
           <Form id="addEditNoteForm" onSubmit={handleSubmit(onSubmit)}>
+            
             <TextInputField
               name="title"
               label="Title"
+              register={register}
+              registerOptions={{ required: "Required title" }}
+              error={errors.title}
+
               type="text"
               placeholder="Title"
-              register={register}
-              registerOptions={{ required: "Required" }}
-              error={errors.title}
             />
 
             <TextInputField
               name="text"
               label="Text"
-              // type="text"
               as="textarea"
               rows={5}
               placeholder="Text"
               register={register}
-              // registerOptions={{required:"Required"}}
-              // error={errors.title}
+    
             />
 
-            {/* <Form.Group className="mb-3">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Title"
-                isInvalid={!!errors.title}
-                {...register("title", { required: "Required" })}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.title?.message}
-              </Form.Control.Feedback>
-            </Form.Group> */}
-
-            {/* <Form.Group className="mb-r">
-              <Form.Label>Text</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={5}
-                placeholder="Text"
-                {...register("text")}
-              />
-            </Form.Group> */}
-            
           </Form>
         </Modal.Body>
         <Modal.Footer>

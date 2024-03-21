@@ -1,7 +1,7 @@
 import { Button, Navbar } from "react-bootstrap";
-import { UserModel } from "../../model/userModel"
+import { UserModel } from "../aModal/userModal"
 
-import * as NoteApi from "../../networks/note_api"
+import * as NoteApi from "../aNetwork/note_api"
 
 interface NavBarLoggedInViewProps {
     user:UserModel,
