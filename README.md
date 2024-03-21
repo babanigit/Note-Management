@@ -1,6 +1,6 @@
 # Ts-nodejs
 
-backend api :- https://note-management-api-yz85.onrender.com/
+backend api :- 
 
 ![ss1](ss/note5.png)
 ![ss1](ss/note4.png)
