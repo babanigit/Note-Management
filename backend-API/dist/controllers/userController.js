@@ -18,24 +18,17 @@ const userSchema_1 = __importDefault(require("../models/userSchema"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const http_errors_1 = __importDefault(require("http-errors"));
 const getAuthenticatedUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const getAuthenticatedUserId = req.session.userId;
     try {
-        // assertIsDefine(getAuthenticatedUserId);
-        // if (!getAuthenticatedUserId) {
-        //   throw createHttpError(401, "user is not authenticated -b");
-        // }
-        // // because of session.userId will get the data of user which was stored in cookie because of login and reg
-        // const user = await User.findById(
-        //   req.session.userId
-        // ).select("+email").exec();
-        const user = yield userSchema_1.default.findById(req.session.userId).select("+email").exec();
-        console.log("session is ", req.session.userId);
+        const userId = req.session.userId; // Access the userId directly from req.session
+        console.log("session Id ", userId);
+        console.log("session is ", req.session);
+        const user = yield userSchema_1.default.findById(userId).select("+email").exec();
         console.log("getAuth from userController ", user);
         res.status(200).json(user);
     }
     catch (error) {
         next(error);
-        console.log("error from contoller/getAuth");
+        console.log("error from controller/getAuth");
         console.error(error);
     }
 });
@@ -47,7 +40,6 @@ const getRegister = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             throw (0, http_errors_1.default)(400, "parameters missing");
         }
         else {
-            // const userExist= await User.findOne({email:email});
             const existingUserEmail = yield userSchema_1.default.findOne({ email: email });
             if (existingUserEmail) {
                 throw (0, http_errors_1.default)(409, "email is already taken!");
@@ -104,7 +96,7 @@ const getLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             }
             // we sending user._id to the session.userId
             req.session.userId = user._id;
-            console.log("session is ", req.session.userId);
+            console.log("session is ", req.session);
             console.log("getLog from userController  ", user);
             res.status(200).json(user);
         }

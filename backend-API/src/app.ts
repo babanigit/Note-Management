@@ -13,6 +13,7 @@ dotenv.config({ path: "./.env" });
 
 import noteRoutes from "./dRoutes/noteRoutes";
 import userRouter from "./dRoutes/userRoutes";
+import { requiresAuth } from "./middleware/auth";
 // import { requiresAuth } from "./middleware/auth";
 
 const app: Express = express();
@@ -29,11 +30,11 @@ app.use(cors());
 
 // we initialize the session method before routes so that all routes can access the session functions
 app.use(session({
-  secret: process.env.SESSION_SECRET || " ",
+  secret: process.env.SESSION_SECRET!,
   resave:false, 
   saveUninitialized:false,
   cookie:{
-    maxAge:60 * 60 * 1000,
+        maxAge: 60 * 60 * 1000,
   },
   rolling:true,
   store: MongoStore.create({
@@ -42,10 +43,12 @@ app.use(session({
 }));
 
 
-
 // routes
-app.use("/api/notes", noteRoutes);
+
 app.use("/api/users", userRouter)
+
+app.use("/api/notes",requiresAuth,  noteRoutes);
+
 
 
 

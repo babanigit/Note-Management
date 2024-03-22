@@ -12,33 +12,21 @@ import { assertIsDefine } from "../utils/assertIsDefine";
 
 export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
 
-  const getAuthenticatedUserId = req.session.userId;
-
   try {
+    const userId = req.session.userId; // Access the userId directly from req.session
 
-    // assertIsDefine(getAuthenticatedUserId);
+    console.log("session Id ", userId);
+    console.log("session is ", req.session);
 
-    // if (!getAuthenticatedUserId) {
-    //   throw createHttpError(401, "user is not authenticated -b");
-    // }
+    const user = await User.findById(userId).select("+email").exec();
 
-    // // because of session.userId will get the data of user which was stored in cookie because of login and reg
-    // const user = await User.findById(
-    //   req.session.userId
-    // ).select("+email").exec();
-
-
-    const user = await User.findById(req.session.userId).select("+email").exec();
-
-    console.log("session is " , req.session.userId)
-
-    console.log("getAuth from userController " , user)
+    console.log("getAuth from userController ", user);
 
     res.status(200).json(user);
 
   } catch (error) {
     next(error)
-    console.log("error from contoller/getAuth")
+    console.log("error from controller/getAuth")
     console.error(error)
   }
 }
@@ -76,7 +64,6 @@ const getRegister = async (req: Request, res: Response, next: NextFunction): Pro
     }
 
     else {
-      // const userExist= await User.findOne({email:email});
 
       const existingUserEmail = await User.findOne({ email: email });
       if (existingUserEmail) {
@@ -167,10 +154,11 @@ const getLogin = async (req:Request, res:Response, next:NextFunction) => {
 
       // we sending user._id to the session.userId
       req.session.userId = user._id;
+      
 
 
 
-      console.log("session is " , req.session.userId)
+      console.log("session is " , req.session)
 
       console.log("getLog from userController  " , user)
 

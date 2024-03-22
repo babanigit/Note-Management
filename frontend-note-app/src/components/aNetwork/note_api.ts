@@ -4,8 +4,13 @@ import { UserModel } from "../aModal/userModal";
 // will update this links
 
 // http://localhost:4000
+// const noteLink = "https://note-management-api-pvjm.onrender.com/api/notes/";
 const noteLink = "/api/notes/";
+
+
+// const userLink = "https://note-management-api-pvjm.onrender.com/api/users/";
 const userLink = "/api/users/";
+
 
 
 // we used this to handle the errors while fetching the data from api

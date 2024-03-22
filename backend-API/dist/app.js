@@ -36,6 +36,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({ path: "./.env" });
 const noteRoutes_1 = __importDefault(require("./dRoutes/noteRoutes"));
 const userRoutes_1 = __importDefault(require("./dRoutes/userRoutes"));
+const auth_1 = require("./middleware/auth");
 // import { requiresAuth } from "./middleware/auth";
 const app = (0, express_1.default)();
 app.use((0, morgan_1.default)("dev"));
@@ -44,7 +45,7 @@ app.use((0, cors_1.default)());
 // import utilEnv from "./util/validateEnv";
 // we initialize the session method before routes so that all routes can access the session functions
 app.use((0, express_session_1.default)({
-    secret: process.env.SESSION_SECRET || " ",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -56,8 +57,8 @@ app.use((0, express_session_1.default)({
     })
 }));
 // routes
-app.use("/api/notes", noteRoutes_1.default);
 app.use("/api/users", userRoutes_1.default);
+app.use("/api/notes", auth_1.requiresAuth, noteRoutes_1.default);
 app.get("/", (req, res, next) => {
     try {
         res.status(200).json({

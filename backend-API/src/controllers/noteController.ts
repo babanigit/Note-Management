@@ -12,21 +12,18 @@ interface CreateNoteBody{
 
 export const getNotes =  async(req: Request, res: Response, next:NextFunction) => {
 
-  const getAuthenticatedUserId = req.session.userId
 
     try {
-      // throw createHttpError(401);
+  const getAuthenticatedUserId = req.session.userId
 
-      // assertIsDefine(getAuthenticatedUserId)
 
-        const notes= await NoteModel.find(
-          {userId: getAuthenticatedUserId}
-          ).exec();
+        const notes= await NoteModel.find({userId: getAuthenticatedUserId}).exec();
         res.status(200).json(notes);
 
 
         console.log("getNotes from noteController")
-        console.log("session is " , req.session.userId , notes)
+        console.log("session is ", req.session)
+        console.log("session Id is " , getAuthenticatedUserId, notes)
 
 
     } catch (error) {
@@ -60,28 +57,30 @@ export const getNotes =  async(req: Request, res: Response, next:NextFunction) =
   }
 
  
-
-  export const createNotes =  async(req: Request, res: Response, next:NextFunction) => {
+  export const createNotes: RequestHandler<unknown, unknown, CreateNoteBody, unknown> = async (req, res, next) => {
 
     const {title,text}:CreateNoteBody = req.body ;
     const getAuthenticatedUserId = req.session.userId
 
     try {
-      assertIsDefine(getAuthenticatedUserId)
+      // assertIsDefine(getAuthenticatedUserId)
 
+      console.log("create note session id",req.session.userId)
 
       if(!title) throw createHttpError(400,"note must have a title")
       const newNotes=await NoteModel.create({
-    userId:getAuthenticatedUserId, //here we stored new property "userId" which has req.session.userId
+        userId:getAuthenticatedUserId, //here we stored new property "userId" which has req.session.userId
         title,
         text,
       })
       res.status(201).json(newNotes)
+
     } catch (error) {
         next(error)
     }
   }
 
+  
   export const updateNote:RequestHandler =  async(req , res , next) => {
     const noteId= req.params.noteId;
     const newTitle=req.body.title;
