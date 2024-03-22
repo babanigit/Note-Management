@@ -4,12 +4,12 @@ import { UserModel } from "../aModal/userModal";
 // will update this links
 
 // http://localhost:4000
-// const noteLink = "https://note-management-api-pvjm.onrender.com/api/notes/";
-const noteLink = "/api/notes/";
+const noteLink = "https://note-management-api-pvjm.onrender.com/api/notes/";
+// const noteLink = "/api/notes/";
 
 
-// const userLink = "https://note-management-api-pvjm.onrender.com/api/users/";
-const userLink = "/api/users/";
+const userLink = "https://note-management-api-pvjm.onrender.com/api/users/";
+// const userLink = "/api/users/";
 
 
 
