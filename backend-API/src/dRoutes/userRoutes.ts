@@ -11,7 +11,7 @@ import { requiresAuth } from "../middleware/auth";
 
 
 // authenticate
-router.get("/", getAuthenticatedUser);
+router.get("/", requiresAuth, getAuthenticatedUser);
 // Registration
 router.route("/register").post(getRegister)
 // login

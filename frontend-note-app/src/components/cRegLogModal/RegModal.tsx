@@ -10,8 +10,9 @@ import TextInputField from "../form/TextInputField";
 import { useState } from "react";
 
 import styleUtils from "../../style/utils.module.css";
+import { ConflictError } from "../zErrors/http-errors";
 
-// import { ConflictError } from "../errors/http-errors";
+
 
 interface RegisterModelProps {
     onDismiss: () => void;
@@ -43,15 +44,15 @@ const RegModal = ({
             onRegistrationSuccessful(newUser);
 
         } catch (error) {
-            // if (error instanceof ConflictError) {
-            //     setErrorText(error.message);
-            // } else {
-            //     alert(error);
-            // }
-            // console.error(error);
+            if (error instanceof ConflictError) {
+                setErrorText(error.message);
+            } else {
+                alert(error);
+            }
+            console.error(error);
 
-            alert(error);
-            console.log(error);
+            // alert(error);
+            // console.log(error);
         }
     }
 

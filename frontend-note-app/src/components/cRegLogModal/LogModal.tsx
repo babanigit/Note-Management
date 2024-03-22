@@ -9,8 +9,7 @@ import TextInputField from "../form/TextInputField";
 import { useState } from "react";
 
 import styleUtils from "../../style/utils.module.css"
-
-// import { UnauthorizedError } from "../errors/http-errors";
+import { UnauthorizedError } from "../zErrors/http-errors";
 
 
 
@@ -38,15 +37,15 @@ const LogModal = ({ onDismiss, onLoginSuccessful }: LoginModelProps) => {
 
         } catch (error) {
 
-            // if (error instanceof UnauthorizedError) {
-            //     setErrorText(error.message);
-            // } else {
-            //     alert(error);
-            // }
-            // console.error(error);
+            if (error instanceof UnauthorizedError) {
+                setErrorText(error.message);
+            } else {
+                alert(error);
+            }
+            console.error(error);
 
-            alert(error)
-            console.log(error);
+            // alert(error)
+            // console.log(error);
         }
     }
 

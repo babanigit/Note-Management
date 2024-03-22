@@ -1,5 +1,6 @@
 import { NoteModel } from "../aModal/noteModal";
 import { UserModel } from "../aModal/userModal";
+import { ConflictError, UnauthorizedError } from "../zErrors/http-errors";
 
 // will update this links
 
@@ -22,7 +23,15 @@ async function fetchData(input: RequestInfo, init?: RequestInit) {
         // errorBody > errorMessage > throw Error.
         const errorBody = await res.json();
         const errorMessage = errorBody.error;
-        throw Error(errorMessage);
+
+        if(res.status===401) {
+            throw new UnauthorizedError(errorMessage)
+        }else if(res.status===409) {
+            throw new ConflictError(errorMessage);
+        }else{
+            throw Error("request failed with status: " + res.status + " message "+ errorMessage);
+        }
+
     }
 }
 
