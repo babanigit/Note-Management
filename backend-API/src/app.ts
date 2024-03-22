@@ -47,7 +47,7 @@ app.use(session({
 
 app.use("/api/users", userRouter)
 
-app.use("/api/notes",requiresAuth,  noteRoutes);
+app.use("/api/notes",  noteRoutes);
 
 
 
