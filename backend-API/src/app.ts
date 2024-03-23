@@ -20,7 +20,13 @@ const app: Express = express();
 
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(cors());
+
+
+const corsOptions = {
+  origin: "https://note-management-app-three.vercel.app/" // frontend URI (ReactJS)
+}
+
+app.use(cors(corsOptions));
 
 
 

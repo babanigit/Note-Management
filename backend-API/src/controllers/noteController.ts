@@ -16,6 +16,8 @@ export const getNotes =  async(req: Request, res: Response, next:NextFunction) =
     try {
   const getAuthenticatedUserId = req.session.userId
 
+  assertIsDefine(getAuthenticatedUserId);
+
 
         const notes= await NoteModel.find({userId: getAuthenticatedUserId}).exec();
         res.status(200).json(notes);
@@ -63,7 +65,7 @@ export const getNotes =  async(req: Request, res: Response, next:NextFunction) =
     const getAuthenticatedUserId = req.session.userId
 
     try {
-      // assertIsDefine(getAuthenticatedUserId)
+      assertIsDefine(getAuthenticatedUserId)
 
       console.log("create note session id",req.session.userId)
 

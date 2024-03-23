@@ -5,17 +5,23 @@ import { ConflictError, UnauthorizedError } from "../zErrors/http-errors";
 // will update this links
 
 // http://localhost:4000
-const noteLink = "https://note-management-api-pvjm.onrender.com/api/notes/";
-// const noteLink = "/api/notes/";
+// https://note-management-api-pvjm.onrender.com/api/notes
 
+// const noteLink = "http://localhost:4000/api/notes/";
+// const noteLink = "https://note-management-api-pvjm.onrender.com/api/notes/";
+const noteLink = "/api/notes/";
 
-const userLink = "https://note-management-api-pvjm.onrender.com/api/users/";
-// const userLink = "/api/users/";
+// const userLink = "http://localhost:4000/api/users/";
+// const userLink = "https://note-management-api-pvjm.onrender.com/api/users/";
+const userLink = "/api/users/";
 
 
 
 // we used this to handle the errors while fetching the data from api
 async function fetchData(input: RequestInfo, init?: RequestInit) {
+
+    console.log("fetchData",input,init)
+
     const res = await fetch(input, init);
     if (res.ok) {
         return res;
@@ -74,6 +80,8 @@ export interface LoginCred {
     passwd:string;
 }
 export async function getLoginUser(Credential:LoginCred):Promise<UserModel>{
+
+    console.log("getLoginUserFetchData ", Credential)
 
     const res= await fetchData(userLink+"login",{
         method:"POST",

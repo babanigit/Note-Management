@@ -41,7 +41,10 @@ const auth_1 = require("./middleware/auth");
 const app = (0, express_1.default)();
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
-app.use((0, cors_1.default)());
+const corsOptions = {
+    origin: "https://note-management-app-three.vercel.app/" // frontend URI (ReactJS)
+};
+app.use((0, cors_1.default)(corsOptions));
 // import utilEnv from "./util/validateEnv";
 // we initialize the session method before routes so that all routes can access the session functions
 app.use((0, express_session_1.default)({

@@ -20,6 +20,7 @@ const assertIsDefine_1 = require("../utils/assertIsDefine");
 const getNotes = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const getAuthenticatedUserId = req.session.userId;
+        (0, assertIsDefine_1.assertIsDefine)(getAuthenticatedUserId);
         const notes = yield noteSchema_1.default.find({ userId: getAuthenticatedUserId }).exec();
         res.status(200).json(notes);
         console.log("getNotes from noteController");
@@ -55,7 +56,7 @@ const createNotes = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     const { title, text } = req.body;
     const getAuthenticatedUserId = req.session.userId;
     try {
-        // assertIsDefine(getAuthenticatedUserId)
+        (0, assertIsDefine_1.assertIsDefine)(getAuthenticatedUserId);
         console.log("create note session id", req.session.userId);
         if (!title)
             throw (0, http_errors_1.default)(400, "note must have a title");
