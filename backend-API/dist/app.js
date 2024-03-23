@@ -42,7 +42,9 @@ const app = (0, express_1.default)();
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
 const corsOptions = {
-    origin: "https://note-management-app-three.vercel.app/" // frontend URI (ReactJS)
+    origin: ["https://note-management-app-three.vercel.app"],
+    methods: ["P0ST", "GET"],
+    credentials: true,
 };
 app.use((0, cors_1.default)(corsOptions));
 // import utilEnv from "./util/validateEnv";

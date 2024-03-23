@@ -3,7 +3,7 @@ import express, { Express, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import morgan from "morgan";
 
-import createHttpError,{isHttpError} from "http-errors";
+import createHttpError, { isHttpError } from "http-errors";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
@@ -23,8 +23,12 @@ app.use(express.json());
 
 
 const corsOptions = {
-  origin: "https://note-management-app-three.vercel.app/" // frontend URI (ReactJS)
+  origin: ["https://note-management-app-three.vercel.app"],
+  methods: ["P0ST", "GET"],
+  credentials: true,
 }
+
+
 
 app.use(cors(corsOptions));
 
@@ -37,12 +41,12 @@ app.use(cors(corsOptions));
 // we initialize the session method before routes so that all routes can access the session functions
 app.use(session({
   secret: process.env.SESSION_SECRET!,
-  resave:false, 
-  saveUninitialized:false,
-  cookie:{
-        maxAge: 60 * 60 * 1000,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 60 * 60 * 1000,
   },
-  rolling:true,
+  rolling: true,
   store: MongoStore.create({
     mongoUrl: process.env.DATABASE
   })
@@ -53,7 +57,7 @@ app.use(session({
 
 app.use("/api/users", userRouter)
 
-app.use("/api/notes",requiresAuth,  noteRoutes);
+app.use("/api/notes", requiresAuth, noteRoutes);
 
 
 
@@ -74,18 +78,18 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
 app.use((res, req, next) => {
   // next(Error("endpoint not found"));
 
-  next(createHttpError(404,"endpoint not found"))
+  next(createHttpError(404, "endpoint not found"))
 });
 
 // error handler middleware
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
   console.error(error);
   let errorMessage = "an unknown error occurred";
-  let statusCode=500;
+  let statusCode = 500;
   // if (error instanceof Error) errorMessage = error.message;
-  if(isHttpError(error)){
-    statusCode=error.status;
-    errorMessage=error.message;
+  if (isHttpError(error)) {
+    statusCode = error.status;
+    errorMessage = error.message;
   }
   res.status(statusCode).json({ error: errorMessage });
 });
