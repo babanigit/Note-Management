@@ -5,15 +5,16 @@ import { ConflictError, UnauthorizedError } from "../zErrors/http-errors";
 // will update this links
 
 // http://localhost:4000
-// https://note-management-api-pvjm.onrender.com/api/notes
+// https://note-management-api-pvjm.onrender.com/api/notes/
+
 
 // const noteLink = "http://localhost:4000/api/notes/";
 // const noteLink = "https://note-management-api-pvjm.onrender.com/api/notes/";
-const noteLink = "/api/notes/";
+const noteLink = "api/notes/";
 
 // const userLink = "http://localhost:4000/api/users/";
 // const userLink = "https://note-management-api-pvjm.onrender.com/api/users/";
-const userLink = "/api/users/";
+const userLink = "api/users/";
 
 
 

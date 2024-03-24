@@ -14,7 +14,6 @@ dotenv.config({ path: "./.env" });
 import noteRoutes from "./dRoutes/noteRoutes";
 import userRouter from "./dRoutes/userRoutes";
 import { requiresAuth } from "./middleware/auth";
-// import { requiresAuth } from "./middleware/auth";
 
 const app: Express = express();
 
@@ -22,15 +21,16 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 
-const corsOptions = {
-  origin: ["https://note-management-app-three.vercel.app"],
-  methods: ["P0ST", "GET"],
-  credentials: true,
-}
 
 
+// const corsOptions = {
+//   origin: "http://localhost:3000" // frontend URI (ReactJS)
+// }
 
-app.use(cors(corsOptions));
+
+app.use(cors(
+  // corsOptions
+  ));
 
 
 
