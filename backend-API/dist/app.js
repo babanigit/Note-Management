@@ -40,19 +40,19 @@ const auth_1 = require("./middleware/auth");
 const app = (0, express_1.default)();
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
-// const corsOptions = {
-//   origin: "http://localhost:3000" // frontend URI (ReactJS)
-// }
-app.use((0, cors_1.default)(
-// corsOptions
-));
-// import utilEnv from "./util/validateEnv";
+// app.set("trust proxy", 1); // trust first proxy
+app.enable('trust proxy');
 // we initialize the session method before routes so that all routes can access the session functions
 app.use((0, express_session_1.default)({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    proxy: true, // Required for Heroku & Digital Ocean (regarding X-Forwarded-For)
+    name: 'MyCoolWebAppCookieName', // This needs to be unique per-host.
     cookie: {
+        // secure: true, // required for cookies to work on HTTPS
+        httpOnly: false,
+        sameSite: 'none',
         maxAge: 60 * 60 * 1000,
     },
     rolling: true,
@@ -60,6 +60,16 @@ app.use((0, express_session_1.default)({
         mongoUrl: process.env.DATABASE
     })
 }));
+const corsOptions = {
+    origin: "http://localhost:3000", // frontend URI (ReactJS)
+    credentials: true // Allows session cookies to be sent from frontend to backend 
+};
+app.use((0, cors_1.default)(corsOptions));
+// // Configure CORS to allow requests from your frontend domain
+// app.use(cors({
+//   origin: 'http://localhost:3000/', // Replace with your frontend URL
+//   credentials: true // Allows session cookies to be sent from frontend to backend
+// }));
 // routes
 app.use("/api/users", userRoutes_1.default);
 app.use("/api/notes", auth_1.requiresAuth, noteRoutes_1.default);

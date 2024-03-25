@@ -59,8 +59,6 @@ const getRegister = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                 });
                 // we sending user._id to the session.userId
                 req.session.userId = user._id;
-                console.log("session is ", req.session.userId);
-                console.log("getReg from userController", user);
                 res.status(200).json(user);
             }
         }
@@ -72,11 +70,7 @@ const getRegister = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.getRegister = getRegister;
 const getLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // const userName = req.body.userName;
-    // const passwd = req.body.passwd;
     const { userName, passwd } = yield req.body;
-    // throw createHttpError(404,"random errrorjorrro")
-    console.log("getLogin from userController ", userName, passwd);
     try {
         if (!userName || !passwd) {
             throw (0, http_errors_1.default)(400, "Parameters missing");
@@ -96,8 +90,6 @@ const getLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             }
             // we sending user._id to the session.userId
             req.session.userId = user._id;
-            console.log("session is ", req.session);
-            console.log("getLog from userController  ", user);
             res.status(200).json(user);
         }
     }

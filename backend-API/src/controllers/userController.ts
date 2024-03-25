@@ -94,9 +94,6 @@ const getRegister = async (req: Request, res: Response, next: NextFunction): Pro
         // we sending user._id to the session.userId
         req.session.userId = user._id;
 
-        console.log("session is ", req.session.userId)
-
-        console.log("getReg from userController", user)
         res.status(200).json(user);
       }
     }
@@ -116,15 +113,7 @@ interface IUser {
 const getLogin = async (req:Request, res:Response, next:NextFunction) => {
 
 
-  // const userName = req.body.userName;
-  // const passwd = req.body.passwd;
-
   const { userName, passwd } = await req.body;
-
-
-
-  // throw createHttpError(404,"random errrorjorrro")
-  console.log("getLogin from userController ",userName,passwd)
 
   try {
     if (!userName || !passwd) {
@@ -154,16 +143,8 @@ const getLogin = async (req:Request, res:Response, next:NextFunction) => {
 
       // we sending user._id to the session.userId
       req.session.userId = user._id;
-      
-
-
-
-      console.log("session is " , req.session)
-
-      console.log("getLog from userController  " , user)
 
       res.status(200).json(user);
-
 
 
     }

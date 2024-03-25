@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 import app from "./app"
+import cors from "cors";
+
+
+
+
 
 
 const port = process.env.PORT;
