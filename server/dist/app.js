@@ -32,6 +32,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const http_errors_1 = __importStar(require("http-errors"));
 const express_session_1 = __importDefault(require("express-session"));
 const connect_mongo_1 = __importDefault(require("connect-mongo"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({ path: "./.env" });
 const noteRoutes_1 = __importDefault(require("./dRoutes/noteRoutes"));
@@ -40,6 +41,7 @@ const auth_1 = require("./middleware/auth");
 const app = (0, express_1.default)();
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
+app.use((0, cookie_parser_1.default)());
 // app.set("trust proxy", 1); // trust first proxy
 app.enable('trust proxy');
 // we initialize the session method before routes so that all routes can access the session functions

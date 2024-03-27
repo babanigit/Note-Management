@@ -4,7 +4,7 @@ import { Button, Col, Row, Spinner } from "react-bootstrap";
 import sytleUtil from "../../style/utils.module.css";
 
 import { FaPlus } from "react-icons/fa";
-import AddEditNoteDialog from "../../components/noteDialog/AddEditNoteDialog";
+import AddEditNoteDialog from "../noteDialog/AddEditNoteDialog";
 
 import { useEffect, useState } from "react";
 import { NoteModel } from "../aModal/noteModal";

@@ -6,6 +6,7 @@ import morgan from "morgan";
 import createHttpError, { isHttpError } from "http-errors";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import cookieParser from "cookie-parser"
 
 import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
@@ -20,6 +21,7 @@ const app: Express = express();
 app.use(morgan("dev"));
 app.use(express.json());
 
+app.use(cookieParser())
 
 
 
