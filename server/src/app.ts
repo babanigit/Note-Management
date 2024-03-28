@@ -9,12 +9,15 @@ import MongoStore from "connect-mongo";
 import cookieParser from "cookie-parser"
 
 import dotenv from "dotenv";
-dotenv.config({ path: "./.env" });
+dotenv.config({ path: "../.env" });
 
 
 import noteRoutes from "./dRoutes/noteRoutes";
 import userRouter from "./dRoutes/userRoutes";
 import { requiresAuth } from "./middleware/auth";
+
+import path from 'path';
+
 
 const app: Express = express();
 
@@ -22,6 +25,14 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 app.use(cookieParser())
+
+
+// const dirname = path.resolve();
+
+const dirname = path.dirname(path.resolve());
+// const parentDirname = path.dirname(dirname);
+// const newPath = path.join(parentDirname, path.basename(dirname));
+// console.log(newPath);
 
 
 
@@ -70,8 +81,22 @@ app.use(cors(
 // routes
 
 app.use("/api/users", userRouter)
-
 app.use("/api/notes",requiresAuth, noteRoutes);
+
+
+
+
+
+
+// use the client app
+app.use(express.static(path.join(dirname, "/client/build")));
+
+console.log(dirname)
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(dirname, '/client/build/index.html'));
+});
+
 
 
 

@@ -34,14 +34,20 @@ const express_session_1 = __importDefault(require("express-session"));
 const connect_mongo_1 = __importDefault(require("connect-mongo"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config({ path: "./.env" });
+dotenv_1.default.config({ path: "../.env" });
 const noteRoutes_1 = __importDefault(require("./dRoutes/noteRoutes"));
 const userRoutes_1 = __importDefault(require("./dRoutes/userRoutes"));
 const auth_1 = require("./middleware/auth");
+const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
+// const dirname = path.resolve();
+const dirname = path_1.default.dirname(path_1.default.resolve());
+// const parentDirname = path.dirname(dirname);
+// const newPath = path.join(parentDirname, path.basename(dirname));
+// console.log(newPath);
 // app.set("trust proxy", 1); // trust first proxy
 app.enable('trust proxy');
 // we initialize the session method before routes so that all routes can access the session functions
@@ -75,6 +81,12 @@ app.use((0, cors_1.default)(corsOptions));
 // routes
 app.use("/api/users", userRoutes_1.default);
 app.use("/api/notes", auth_1.requiresAuth, noteRoutes_1.default);
+// use the client app
+app.use(express_1.default.static(path_1.default.join(dirname, "/client/build")));
+console.log(dirname);
+app.get('*', (req, res) => {
+    res.sendFile(path_1.default.join(dirname, '/client/build/index.html'));
+});
 app.get("/", (req, res, next) => {
     try {
         res.status(200).json({

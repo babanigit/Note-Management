@@ -1,5 +1,5 @@
 
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form"
 import { UserModel } from "../aModal/userModal";
 import { LoginCred } from "../aNetwork/note_api";
 

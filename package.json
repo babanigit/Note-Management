@@ -1,0 +1,23 @@
+{
+  "name": "ts-node-express",
+  "version": "1.0.0",
+  "description": "note:- getting error after deployment, will figure it out soon...",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf server/dist && npx tsc",
+    "prestart": "npm run build",
+    "start": "node server/dist/index.js",
+    "preserve": "npm run build",
+    "serve": "concurrently \"npx tsc -w ./server \" \"nodemon ./server/dist/index.js\"",
+    "build2" : "npm install --prefix ./client && npm run build --prefix ./client && npm install",
+    "cc": ""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "rimraf": "^5.0.5"
+  }
+}
