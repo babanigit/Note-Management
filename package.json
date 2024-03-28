@@ -8,7 +8,7 @@
     "build": "rimraf server/dist && npx tsc",
     "prestart": "npm run build",
     "start": "node server/dist/index.js",
-    "start2": "npm start --prefix ./server",
+    "start2": "npm run serve --prefix ./server",
     "preserve": "npm run build",
     "serve": "concurrently \"npx tsc -w ./server \" \"nodemon ./server/dist/index.js\"",
     "build2" : "npm install --prefix ./client && npm run build --prefix ./client && npm install",
