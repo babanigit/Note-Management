@@ -66,16 +66,10 @@ const corsOptions = {
   origin: "https://note-management-five.vercel.app", // frontend URI (ReactJS)
   credentials: true // Allows session cookies to be sent from frontend to backend 
 }
-
 app.use(cors(
   corsOptions
   ));
 
-// // Configure CORS to allow requests from your frontend domain
-// app.use(cors({
-//   origin: 'http://localhost:3000/', // Replace with your frontend URL
-//   credentials: true // Allows session cookies to be sent from frontend to backend
-// }));
 
 
 // routes
@@ -90,12 +84,10 @@ app.use("/api/notes",requiresAuth, noteRoutes);
 
 // // use the client app
 // app.use(express.static(path.join(dirname, "/client/build")));
-
 // console.log(dirname)
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(dirname, '/client/build/index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(dirname, '/client/build/index.html'));
+// });
 
 
 

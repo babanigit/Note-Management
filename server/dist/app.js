@@ -73,20 +73,15 @@ const corsOptions = {
     credentials: true // Allows session cookies to be sent from frontend to backend 
 };
 app.use((0, cors_1.default)(corsOptions));
-// // Configure CORS to allow requests from your frontend domain
-// app.use(cors({
-//   origin: 'http://localhost:3000/', // Replace with your frontend URL
-//   credentials: true // Allows session cookies to be sent from frontend to backend
-// }));
 // routes
 app.use("/api/users", userRoutes_1.default);
 app.use("/api/notes", auth_1.requiresAuth, noteRoutes_1.default);
 // // use the client app
 // app.use(express.static(path.join(dirname, "/client/build")));
 // console.log(dirname)
-app.get('*', (req, res) => {
-    res.sendFile(path_1.default.join(dirname, '/client/build/index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(dirname, '/client/build/index.html'));
+// });
 app.get("/", (req, res, next) => {
     try {
         res.status(200).json({
