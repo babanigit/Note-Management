@@ -63,7 +63,7 @@ app.use(session({
 
 
 const corsOptions = {
-  origin: "http://localhost:3000", // frontend URI (ReactJS)
+  origin: "", // frontend URI (ReactJS)
   credentials: true // Allows session cookies to be sent from frontend to backend 
 }
 
