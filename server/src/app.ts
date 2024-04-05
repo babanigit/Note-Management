@@ -63,7 +63,7 @@ app.use(session({
 
 
 const corsOptions = {
-  origin: "", // frontend URI (ReactJS)
+  origin: "https://note-management-five.vercel.app", // frontend URI (ReactJS)
   credentials: true // Allows session cookies to be sent from frontend to backend 
 }
 
