@@ -81,9 +81,9 @@ app.use((0, cors_1.default)(corsOptions));
 // routes
 app.use("/api/users", userRoutes_1.default);
 app.use("/api/notes", auth_1.requiresAuth, noteRoutes_1.default);
-// use the client app
-app.use(express_1.default.static(path_1.default.join(dirname, "/client/build")));
-console.log(dirname);
+// // use the client app
+// app.use(express.static(path.join(dirname, "/client/build")));
+// console.log(dirname)
 app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(dirname, '/client/build/index.html'));
 });

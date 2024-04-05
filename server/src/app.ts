@@ -88,10 +88,10 @@ app.use("/api/notes",requiresAuth, noteRoutes);
 
 
 
-// use the client app
-app.use(express.static(path.join(dirname, "/client/build")));
+// // use the client app
+// app.use(express.static(path.join(dirname, "/client/build")));
 
-console.log(dirname)
+// console.log(dirname)
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(dirname, '/client/build/index.html'));
