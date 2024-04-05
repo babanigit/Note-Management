@@ -69,7 +69,7 @@ app.use((0, express_session_1.default)({
     })
 }));
 const corsOptions = {
-    origin: "https://note-management-five.vercel.app", // frontend URI (ReactJS)
+    origin: "https://note-management-ovgat0io2-aniket-panchals-projects.vercel.app", // frontend URI (ReactJS)
     credentials: true // Allows session cookies to be sent from frontend to backend 
 };
 app.use((0, cors_1.default)(corsOptions));
