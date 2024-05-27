@@ -1,6 +1,6 @@
 # Ts-nodejs
 
-note:- getting error after deployment, will figure it out soon...
+note:- getting error after deployment, will figure it out soon...(check out ts-config dir on my github, I have soved this deployment error)
 
 backend api :- https://note-management-api-pvjm.onrender.com/
 
